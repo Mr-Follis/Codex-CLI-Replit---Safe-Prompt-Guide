@@ -76,11 +76,14 @@ body{
   color:var(--text);
   line-height:1.65;
   font-size:15px;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
 }
-.container{max-width:1100px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+.container{max-width:1100px;margin:0 auto;padding:0 clamp(16px,4vw,48px);width:100%}
 a{color:var(--amber);text-decoration:none}
 a:hover{text-decoration:underline}
 code,pre{font-family:'JetBrains Mono',monospace}
+img,svg{max-width:100%;height:auto}
 
 /* ── WHAT'S NEW BANNER ── */
 #whats-new-wrapper{background:linear-gradient(135deg,rgba(74,222,128,0.06),rgba(74,222,128,0.02));border-bottom:1px solid rgba(74,222,128,0.15)}
@@ -233,6 +236,78 @@ ul,ol{padding-left:20px;margin-top:8px}
 li{margin-bottom:5px;color:var(--text-dim);font-size:14px;line-height:1.6}
 strong{color:var(--text);font-weight:600}
 h4{font-size:13px;font-weight:600;color:var(--text-dim);margin-bottom:6px;margin-top:14px}
+
+/* ── RESPONSIVE GRID FIXES ── */
+/* Allow grid children to shrink instead of overflowing */
+.two-col > *,
+.skills-grid > *,
+.modes-grid > *,
+.wn-grid > *,
+.nav-grid > *,
+.workflow-flow > *{min-width:0}
+
+/* Prevent code blocks pushing parent containers wider than viewport */
+.code-block{max-width:100%;overflow:hidden}
+pre{max-width:100%;word-wrap:normal;white-space:pre}
+pre code{white-space:pre}
+.card pre,.collapse-inner pre{max-width:100%}
+.banner code,.lead code,p code{word-break:break-word}
+
+/* Tables scroll horizontally inside their wrapper */
+.ref-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(min-width:740px){.ref-table{display:table}}
+
+/* Section header wraps gracefully */
+.section-header{flex-wrap:wrap}
+.section-header h2{flex:1;min-width:0}
+
+/* Daily section: ease the padding on mobile */
+@media(max-width:600px){
+  .daily-section{padding:14px 14px 14px 16px;border-left-width:3px}
+}
+
+/* ── TABLET (≤900px) ── */
+@media(max-width:900px){
+  .two-col{grid-template-columns:1fr}
+  .modes-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── MOBILE (≤640px) ── */
+@media(max-width:640px){
+  body{font-size:14.5px}
+  h2{font-size:1.2rem}
+  h3{font-size:1rem}
+  section{padding:32px 0}
+  .nav-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .nav-btn{padding:12px 6px;font-size:11.5px}
+  .nav-btn .nav-icon{font-size:18px}
+  .skills-grid,.modes-grid,.wn-grid{grid-template-columns:1fr}
+  .workflow-flow{gap:4px}
+  .wf-step{padding:8px 10px;min-width:0}
+  .wf-step .wf-label{font-size:10px}
+  .wf-arrow{font-size:13px}
+  pre{padding:12px;font-size:12px;line-height:1.6}
+  .code-header{padding:6px 10px}
+  .code-lang{font-size:10px}
+  .copy-btn{padding:2px 8px;font-size:10px}
+  .banner{padding:10px 12px;font-size:12.5px}
+  .card{padding:16px}
+  .collapse-trigger{padding:10px 12px;font-size:12.5px}
+  .collapse-inner{padding:12px}
+  .ref-table th,.ref-table td{padding:8px 10px;font-size:12px}
+  footer{padding:24px 0}
+}
+
+/* ── EXTRA SMALL (≤400px) ── */
+@media(max-width:400px){
+  body{font-size:14px}
+  h1{font-size:1.8rem !important}
+  .nav-grid{grid-template-columns:repeat(2,1fr)}
+  .tag{font-size:10.5px;padding:2px 7px}
+  .section-icon{font-size:20px}
+  pre{font-size:11.5px;padding:10px}
+  .container{padding:0 14px}
+}
 </style>
 </head>
 <body>
