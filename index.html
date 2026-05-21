@@ -327,7 +327,7 @@ h4{font-size:13px;font-weight:600;color:var(--text-dim);margin-bottom:6px;margin
     <div class="section-header">
       <span class="section-icon">⚙️</span>
       <h2>Install &amp; Auth</h2>
-      <span class="daily-pill">✦ Daily</span>
+      <span class="daily-pill">★ Daily</span>
     </div>
     <p class="lead">One npm command installs Codex globally in your Replit shell. Authentication uses your existing ChatGPT subscription, zero extra cost.</p>
   </div>
@@ -342,7 +342,7 @@ h4{font-size:13px;font-weight:600;color:var(--text-dim);margin-bottom:6px;margin
   <div class="spacer"></div>
 
   <div class="card recommended">
-    <span class="card-badge badge-recommended">✦ Start Here</span>
+    <span class="card-badge badge-recommended">★ Start Here</span>
     <h3>Fresh Install (Replit Shell)</h3>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'npm i -g @openai/codex')">Copy</button></div>
@@ -357,7 +357,7 @@ h4{font-size:13px;font-weight:600;color:var(--text-dim);margin-bottom:6px;margin
 
   <div class="two-col">
     <div class="card recommended">
-      <span class="card-badge badge-recommended">✦ Recommended for Replit</span>
+      <span class="card-badge badge-recommended">★ Recommended for Replit</span>
       <h3>Device Code Flow (SSH-safe)</h3>
       <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Replit shell runs over SSH, so a browser doesn't pop open. Use device-code auth instead: Codex prints a short code, you visit a URL on your phone or laptop, done.</p>
       <div class="code-block">
@@ -410,7 +410,7 @@ codex auth status</code></pre>
   <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">Same approach as the Claude Code guide. Split your context across three files to keep things manageable.</p>
 
   <div class="card recommended">
-    <span class="card-badge badge-recommended">✦ Recommended Structure</span>
+    <span class="card-badge badge-recommended">★ Recommended Structure</span>
     <div class="two-col">
       <div>
         <h4>AGENTS.md (project root)</h4>
@@ -434,7 +434,7 @@ codex auth status</code></pre>
       <span>📋</span> Example AGENTS.md for a Node/React/PostgreSQL project
       <span class="ct-tag">Template</span>
     </div>
-    <span class="ct-chevron" id="agents-scaffold-chevron">▼</span>
+    <span class="ct-chevron" id="agents-scaffold-chevron">▶</span>
   </button>
   <div class="collapse-body closed" id="agents-scaffold">
     <div class="collapse-inner">
@@ -492,7 +492,7 @@ codex
     <div class="section-header">
       <span class="section-icon">☀️</span>
       <h2>Morning Kick-Off Prompt</h2>
-      <span class="daily-pill">✦ Daily</span>
+      <span class="daily-pill">★ Daily</span>
     </div>
     <p class="lead">Run this at the start of every session to orient Codex without re-explaining the whole project. It reads your AGENTS.md and CONTEXT.md, then asks what you want to work on.</p>
   </div>
@@ -521,7 +521,7 @@ Do not start writing code yet. Wait for me to tell you what to work on today."</
     <div class="section-header">
       <span class="section-icon">⚡</span>
       <h2>Checkpoint / Session Resume</h2>
-      <span class="daily-pill">✦ Daily</span>
+      <span class="daily-pill">★ Daily</span>
     </div>
     <p class="lead">Codex sessions end when you close the shell. Unlike Claude Code, there's no <code>checkpoint</code> slash command, but Codex stores session history and lets you resume cleanly.</p>
   </div>
@@ -530,7 +530,7 @@ Do not start writing code yet. Wait for me to tell you what to work on today."</
 
   <div class="two-col">
     <div class="card recommended">
-      <span class="card-badge badge-recommended">✦ Recommended</span>
+      <span class="card-badge badge-recommended">★ Recommended</span>
       <h3>Resume Last Session</h3>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex resume --last')">Copy</button></div>
@@ -579,7 +579,7 @@ Keep it concise, bullet points are fine.</code></pre>
     <div class="section-header">
       <span class="section-icon">🌙</span>
       <h2>End-of-Day Wrap-Up</h2>
-      <span class="daily-pill">✦ Daily</span>
+      <span class="daily-pill">★ Daily</span>
     </div>
     <p class="lead">Two-tier system. Quick checkpoint for short pauses, full wrap-up at end of day. Both update your context files so tomorrow's session starts cleanly.</p>
   </div>
@@ -664,7 +664,7 @@ web_search = "cached"</code></pre>
       <span>⚙️</span> Named Profiles (switch per-project)
       <span class="ct-tag">Advanced</span>
     </div>
-    <span class="ct-chevron" id="profiles-chevron">▼</span>
+    <span class="ct-chevron" id="profiles-chevron">▶</span>
   </button>
   <div class="collapse-body closed" id="profiles">
     <div class="collapse-inner">
@@ -891,7 +891,7 @@ codex --profile daily</code></pre>
       <span>📋</span> Tips for an AGENTS.md that actually works
       <span class="ct-tag">Best Practice</span>
     </div>
-    <span class="ct-chevron" id="agents-tips-body-chevron">▼</span>
+    <span class="ct-chevron" id="agents-tips-body-chevron">▶</span>
   </button>
   <div class="collapse-body closed" id="agents-tips-body">
     <div class="collapse-inner">
@@ -949,7 +949,7 @@ codex --profile daily</code></pre>
       <span>🔑</span> Auth loops / "not logged in" errors
       <span class="ct-tag">Common</span>
     </div>
-    <span class="ct-chevron" id="ts-auth-chevron">▼</span>
+    <span class="ct-chevron" id="ts-auth-chevron">▶</span>
   </button>
   <div class="collapse-body closed" id="ts-auth">
     <div class="collapse-inner">
@@ -969,7 +969,7 @@ codex auth login --device</code></pre>
       <span>❓</span> Approval prompts won't stop
       <span class="ct-tag">Common</span>
     </div>
-    <span class="ct-chevron" id="ts-approval-chevron">▼</span>
+    <span class="ct-chevron" id="ts-approval-chevron">▶</span>
   </button>
   <div class="collapse-body closed" id="ts-approval">
     <div class="collapse-inner">
@@ -988,7 +988,7 @@ codex auth login --device</code></pre>
       <span>🌐</span> Network access denied inside Codex
       <span class="ct-tag">Common</span>
     </div>
-    <span class="ct-chevron" id="ts-network-chevron">▼</span>
+    <span class="ct-chevron" id="ts-network-chevron">▶</span>
   </button>
   <div class="collapse-body closed" id="ts-network">
     <div class="collapse-inner">
@@ -1012,7 +1012,7 @@ codex auth login --device</code></pre>
       <span>📄</span> AGENTS.md not loading
       <span class="ct-tag">Common</span>
     </div>
-    <span class="ct-chevron" id="ts-context-chevron">▼</span>
+    <span class="ct-chevron" id="ts-context-chevron">▶</span>
   </button>
   <div class="collapse-body closed" id="ts-context">
     <div class="collapse-inner">
@@ -1039,7 +1039,7 @@ codex auth login --device</code></pre>
       <span>📄</span> Full example for a Node.js SaaS project
       <span class="ct-tag">Copy-paste ready</span>
     </div>
-    <span class="ct-chevron" id="example-agents-body-chevron">▼</span>
+    <span class="ct-chevron" id="example-agents-body-chevron">▶</span>
   </button>
   <div class="collapse-body closed" id="example-agents-body">
     <div class="collapse-inner">
@@ -1101,7 +1101,7 @@ codex auth login --device</code></pre>
       <span>📋</span> Version history
       <span class="ct-tag">Changelog</span>
     </div>
-    <span class="ct-chevron" id="changelog-body-chevron">▼</span>
+    <span class="ct-chevron" id="changelog-body-chevron">▶</span>
   </button>
   <div class="collapse-body closed" id="changelog-body">
     <div class="collapse-inner">
