@@ -394,10 +394,10 @@ codex auth status</code></pre>
   <div class="section-header">
     <span class="section-icon">📄</span>
     <h2>AGENTS.md</h2>
-    <span style="background:var(--green-dim);border:1px solid rgba(74,222,128,0.25);color:var(--green);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px">CLAUDE.md Equivalent</span>
+    <span style="background:var(--green-dim);border:1px solid rgba(74,222,128,0.25);color:var(--green);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px">Project Context</span>
   </div>
 
-  <p class="lead"><code>AGENTS.md</code> is Codex's answer to <code>CLAUDE.md</code>. It's the project context file that Codex reads before every task. Keep it accurate and it'll save you re-explaining things session after session.</p>
+  <p class="lead"><code>AGENTS.md</code> is the project context file that Codex reads before every task. It tells Codex about your stack, your conventions, and your rules. Keep it accurate and it'll save you re-explaining the project session after session.</p>
 
   <div class="banner banner-blue">
     <span class="banner-icon">ℹ️</span>
@@ -407,7 +407,7 @@ codex auth status</code></pre>
   <div class="spacer"></div>
 
   <h3>Three-File Setup (Recommended)</h3>
-  <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">Same approach as the Claude Code guide. Split your context across three files to keep things manageable.</p>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">Split your project context across three files to keep things manageable. AGENTS.md holds the stable stuff, CONTEXT.md tracks the moving stuff, ROADMAP.md tracks the plan.</p>
 
   <div class="card recommended">
     <span class="card-badge badge-recommended">★ Recommended Structure</span>
@@ -523,7 +523,7 @@ Do not start writing code yet. Wait for me to tell you what to work on today."</
       <h2>Checkpoint / Session Resume</h2>
       <span class="daily-pill">★ Daily</span>
     </div>
-    <p class="lead">Codex sessions end when you close the shell. Unlike Claude Code, there's no <code>checkpoint</code> slash command, but Codex stores session history and lets you resume cleanly.</p>
+    <p class="lead">Codex sessions end when you close the shell, but the conversation history is stored locally and you can pick it back up cleanly. Use <code>resume</code> after a Replit reload or whenever you want to continue where you left off.</p>
   </div>
 
   <div class="spacer"></div>
@@ -560,7 +560,7 @@ Do not start writing code yet. Wait for me to tell you what to work on today."</
   <div class="spacer"></div>
 
   <h3>Manual Checkpoint Prompt</h3>
-  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">There's no built-in checkpoint command like Claude Code's <code>checkpoint</code> keyword. Instead, ask Codex to summarise progress directly into your CONTEXT.md so you don't lose state.</p>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Codex doesn't have a dedicated checkpoint command. Instead, ask Codex to summarise progress directly into your CONTEXT.md so the next session has a clean handoff.</p>
   <div class="code-block" id="checkpoint-block">
     <div class="code-header"><span class="code-lang">prompt (inside session)</span><button class="copy-btn" id="checkpoint-copy-btn" onclick="copyCode(this,`Pause. Update CONTEXT.md with:\n1. What we completed this session\n2. What is still in progress\n3. Any blockers or decisions made\n4. What to pick up next session\n\nKeep it concise, bullet points are fine.`)">Copy</button></div>
     <pre><code>Pause. Update CONTEXT.md with:
@@ -700,7 +700,7 @@ codex --profile daily</code></pre>
     <h2>Slash Commands</h2>
   </div>
 
-  <p class="lead">Codex's slash commands are the in-session equivalent of Claude Code's Skills. These run inside an active Codex session (after launching with <code>codex</code>).</p>
+  <p class="lead">Slash commands run inside an active Codex session (after launching with <code>codex</code>). Use them to scaffold context files, switch models, manage context budget, and set goals.</p>
 
   <div class="skills-grid">
     <div class="skill-card">
@@ -814,66 +814,74 @@ codex --profile daily</code></pre>
   <table class="ref-table">
     <thead>
       <tr>
-        <th>Concept</th>
-        <th>Claude Code Equivalent</th>
-        <th>Codex CLI Version</th>
+        <th>Action</th>
+        <th>Codex Command / Path</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Context file</td>
-        <td><code>CLAUDE.md</code></td>
-        <td><code>AGENTS.md</code></td>
-      </tr>
-      <tr>
-        <td>Install command</td>
-        <td><code>npm i -g @anthropic-ai/claude-code</code></td>
+        <td>Install Codex CLI</td>
         <td><code>npm i -g @openai/codex</code></td>
       </tr>
       <tr>
-        <td>Launch (interactive)</td>
-        <td><code>claude</code></td>
+        <td>Authenticate (Replit shell, no browser)</td>
+        <td><code>codex auth login --device</code></td>
+      </tr>
+      <tr>
+        <td>Launch interactive session</td>
         <td><code>codex</code></td>
       </tr>
       <tr>
-        <td>One-shot task</td>
-        <td><code>claude "task here"</code></td>
-        <td><code>codex exec "task here"</code></td>
+        <td>One-shot task from shell</td>
+        <td><code>codex exec "task here"</code> &nbsp;(short: <code>codex e</code>)</td>
       </tr>
       <tr>
-        <td>Autonomous mode</td>
-        <td><code>--dangerously-skip-permissions</code></td>
-        <td><code>--full-auto</code> or sandbox danger-full-access</td>
-      </tr>
-      <tr>
-        <td>Resume session</td>
-        <td><code>/resume</code></td>
+        <td>Resume most recent session</td>
         <td><code>codex resume --last</code></td>
       </tr>
       <tr>
-        <td>Compress context</td>
-        <td>checkpoint / new session</td>
-        <td><code>/compact</code></td>
+        <td>Pick a past session from history</td>
+        <td><code>codex resume</code></td>
       </tr>
       <tr>
-        <td>Scaffold context file</td>
-        <td>write CLAUDE.md manually</td>
-        <td><code>/init</code></td>
+        <td>Scaffold AGENTS.md for current project</td>
+        <td><code>/init</code> &nbsp;(inside session)</td>
       </tr>
       <tr>
-        <td>Config file</td>
-        <td><code>~/.claude/settings.json</code></td>
+        <td>Compress session context</td>
+        <td><code>/compact</code> &nbsp;(inside session)</td>
+      </tr>
+      <tr>
+        <td>Switch model mid-session</td>
+        <td><code>/model</code></td>
+      </tr>
+      <tr>
+        <td>Set a persistent session goal</td>
+        <td><code>/goal</code></td>
+      </tr>
+      <tr>
+        <td>Autonomous workspace edits</td>
+        <td><code>codex --sandbox workspace-write</code></td>
+      </tr>
+      <tr>
+        <td>Full automation (no approvals)</td>
+        <td><code>codex --full-auto</code> or <code>--sandbox danger-full-access</code></td>
+      </tr>
+      <tr>
+        <td>Project context file</td>
+        <td><code>AGENTS.md</code> in project root</td>
+      </tr>
+      <tr>
+        <td>Global config file</td>
         <td><code>~/.codex/config.toml</code></td>
       </tr>
       <tr>
         <td>Auth model</td>
-        <td>API key / Anthropic subscription</td>
-        <td>ChatGPT OAuth (device-code for SSH) or API key</td>
+        <td>ChatGPT OAuth (device-code for SSH) or <code>OPENAI_API_KEY</code></td>
       </tr>
       <tr>
         <td>Cost with subscription</td>
-        <td>Zero (Max plan) or per-token (API)</td>
-        <td>Zero extra (ChatGPT Plus/Pro/Team)</td>
+        <td>Zero extra on ChatGPT Plus / Pro / Team</td>
       </tr>
     </tbody>
   </table>
