@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex CLI in Replit | Safe Prompt Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1d242e;
+  --bg4: #22273a;
+  --text: #e6edf3;
+  --text-dim: #c4cbd3;
+  --text-muted: #7d8590;
+  --border: #30363d;
+  --border2: #424a53;
+  --code-text: #e6edf3;
+  --amber: #10a37f;
+  --amber-dim: rgba(16,163,127,0.5);
+  --amber-soft: rgba(16,163,127,0.08);
+  --amber-glow: rgba(16,163,127,0.12);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.08);
+  --blue-border: rgba(96,165,250,0.25);
+  --purple: #a78bfa;
+  --red: #f87171;
+  --green: #4ade80;
+  --green-dim: rgba(74,222,128,0.08);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #fafbfc;
+    --bg2: #ffffff;
+    --bg3: #f4f6f8;
+    --bg4: #e8eaf2;
+    --text: #1f2328;
+    --text-dim: #3b424b;
+    --text-muted: #6c737d;
+    --border: #d0d7de;
+    --border2: #afb8c1;
+    --code-text: #1f2328;
+    --amber: #0a7c60;
+    --amber-soft: rgba(16,163,127,0.05);
+    --amber-glow: rgba(16,163,127,0.10);
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.65;
+  font-size:15px;
+}
+.container{max-width:1100px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+a{color:var(--amber);text-decoration:none}
+a:hover{text-decoration:underline}
+code,pre{font-family:'JetBrains Mono',monospace}
+
+/* ── WHAT'S NEW BANNER ── */
+#whats-new-wrapper{background:linear-gradient(135deg,rgba(74,222,128,0.06),rgba(74,222,128,0.02));border-bottom:1px solid rgba(74,222,128,0.15)}
+#whats-new-toggle{width:100%;display:flex;align-items:center;gap:10px;padding:10px clamp(16px,4vw,48px);background:transparent;border:none;cursor:pointer;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500}
+.pulse-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.6)}50%{box-shadow:0 0 0 6px rgba(74,222,128,0)}}
+.wn-label{color:var(--green);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.wn-text{color:var(--text-dim);flex:1;text-align:left}
+.wn-chevron{margin-left:auto;transition:transform .25s;font-size:12px;color:var(--text-muted)}
+#whats-new-body{overflow:hidden;transition:max-height .35s ease}
+#whats-new-body.closed{max-height:0}
+#whats-new-body.open{max-height:400px}
+.wn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;padding:16px clamp(16px,4vw,48px) 20px}
+.wn-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px}
+.wn-card h4{font-size:13px;font-weight:600;margin-bottom:6px}
+.wn-card p{font-size:12px;color:var(--text-muted);line-height:1.5}
+.wn-card.event{grid-column:1/-1;background:linear-gradient(135deg,rgba(96,165,250,0.06),rgba(167,139,250,0.06),rgba(16,163,127,0.06));border-color:var(--border2)}
+
+/* ── NAV GRID ── */
+#nav-section{padding:24px 0}
+.nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:700px){.nav-grid{grid-template-columns:repeat(2,1fr)}}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg2);cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text);font-size:12px;font-weight:500;text-align:center;transition:border-color .2s,background .2s;text-decoration:none}
+.nav-btn:hover{text-decoration:none;border-color:var(--border2);background:var(--bg3)}
+.nav-btn .nav-icon{font-size:20px}
+.nav-btn.amber-tint{background:var(--amber-soft);border-color:rgba(16,163,127,0.2)}
+.nav-btn.amber-tint:hover{background:var(--amber-glow);border-color:var(--amber-dim)}
+.nav-btn.blue-tint{background:var(--blue-dim);border-color:var(--blue-border)}
+.nav-btn.green-tint{background:var(--green-dim);border-color:rgba(74,222,128,0.25)}
+.nav-btn.purple-tint{background:rgba(167,139,250,0.06);border-color:rgba(167,139,250,0.25)}
+.nav-btn.red-tint{background:rgba(248,113,113,0.06);border-color:rgba(248,113,113,0.25)}
+
+/* ── WORKFLOW ── */
+#workflow-section{text-align:center;padding:32px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.workflow-flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;font-size:13px;color:var(--text-muted);margin-top:12px}
+.wf-step{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;min-width:90px}
+.wf-step .wf-icon{font-size:18px}
+.wf-step .wf-label{font-size:11px;color:var(--text-dim);font-weight:500}
+.wf-arrow{color:var(--border2);font-size:16px}
+
+/* ── SECTION HEADERS ── */
+h2{font-size:1.35rem;font-weight:700;margin-bottom:6px}
+h3{font-size:1.05rem;font-weight:600;margin-bottom:8px;color:var(--text-dim)}
+section{padding:40px 0}
+section+section{border-top:1px solid var(--border)}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.section-icon{font-size:24px;filter:drop-shadow(0 0 6px rgba(16,163,127,0.35))}
+.daily-pill{background:var(--amber-soft);border:1px solid rgba(16,163,127,0.3);color:var(--amber);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;letter-spacing:.04em}
+.daily-section{border-left:4px solid var(--amber);padding-left:20px;background:linear-gradient(90deg,var(--amber-soft),transparent);border-radius:0 var(--radius) var(--radius) 0;padding:16px 16px 16px 20px}
+.daily-section .section-header{margin-bottom:12px}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.card.recommended{border-color:rgba(74,222,128,0.4);box-shadow:0 0 0 1px rgba(74,222,128,0.1),0 2px 12px rgba(74,222,128,0.05)}
+.card.legacy{border-style:dashed;opacity:.75}
+.card-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;margin-bottom:10px}
+.badge-recommended{background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.3)}
+.badge-legacy{background:rgba(125,133,144,0.12);color:var(--text-muted);border:1px solid var(--border)}
+
+/* ── COLLAPSIBLE ── */
+.collapse-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text);transition:background .2s}
+.collapse-trigger:hover{background:var(--bg3)}
+.collapse-trigger .ct-left{display:flex;align-items:center;gap:8px}
+.ct-tag{background:var(--bg3);border:1px solid var(--border);color:var(--text-muted);font-size:11px;padding:1px 7px;border-radius:4px}
+.ct-chevron{transition:transform .25s;font-size:12px;color:var(--text-muted)}
+.collapse-body{overflow:hidden;transition:max-height .35s ease}
+.collapse-body.closed{max-height:0}
+.collapse-body.open{max-height:3000px}
+.collapse-inner{padding:16px;background:var(--bg2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm)}
+
+/* ── CODE BLOCKS ── */
+.code-block{margin:10px 0;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--bg3);border-bottom:1px solid var(--border)}
+.code-lang{font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.copy-btn{background:transparent;border:1px solid var(--border);color:var(--text-muted);padding:3px 10px;border-radius:4px;font-size:11px;cursor:pointer;font-family:'JetBrains Mono',monospace;transition:border-color .2s,color .2s}
+.copy-btn:hover{border-color:var(--amber);color:var(--amber)}
+.copy-btn.copied{border-color:var(--green);color:var(--green)}
+pre{background:var(--bg);padding:16px;overflow-x:auto;margin:0;font-size:13px;line-height:1.7;color:var(--code-text)}
+pre code{background:none;padding:0;border:none;font-size:inherit}
+code{background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:12.5px;color:var(--text-dim)}
+
+/* ── UPDATE BANNERS ── */
+.banner{border-radius:var(--radius-sm);padding:12px 16px;margin:12px 0;display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.55}
+.banner-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.banner-green{background:linear-gradient(135deg,rgba(74,222,128,0.07),rgba(74,222,128,0.03));border:1px solid rgba(74,222,128,0.2)}
+.banner-red{background:linear-gradient(135deg,rgba(248,113,113,0.07),rgba(248,113,113,0.03));border:1px solid rgba(248,113,113,0.2)}
+.banner-amber{background:linear-gradient(135deg,var(--amber-soft),rgba(16,163,127,0.02));border:1px solid rgba(16,163,127,0.2)}
+.banner-blue{background:linear-gradient(135deg,rgba(96,165,250,0.07),rgba(96,165,250,0.03));border:1px solid rgba(96,165,250,0.2)}
+.banner-purple{background:linear-gradient(135deg,rgba(167,139,250,0.07),rgba(167,139,250,0.03));border:1px solid rgba(167,139,250,0.2)}
+
+/* ── REFERENCE TABLE ── */
+.ref-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.ref-table th{background:var(--bg3);color:var(--text-muted);font-weight:600;text-align:left;padding:8px 14px;border:1px solid var(--border);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.ref-table td{padding:9px 14px;border:1px solid var(--border);color:var(--text-dim);vertical-align:top}
+.ref-table tr:hover td{background:var(--bg2)}
+.ref-table code{background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:12px}
+
+/* ── SKILL CARDS ── */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}
+.skill-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.skill-title{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.skill-name{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--amber)}
+.skill-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px}
+.badge-interactive{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-border)}
+.badge-shortcut{background:var(--amber-soft);color:var(--amber);border:1px solid rgba(16,163,127,0.3)}
+.badge-config{background:rgba(167,139,250,0.08);color:var(--purple);border:1px solid rgba(167,139,250,0.25)}
+.badge-runtime{background:var(--green-dim);color:var(--green);border:1px solid rgba(74,222,128,0.25)}
+.skill-desc{font-size:12.5px;color:var(--text-muted);line-height:1.5;margin-bottom:8px}
+.skill-desc:last-child{margin-bottom:0}
+
+/* ── APPROVAL MODES ── */
+.modes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.mode-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.mode-card.mode-safe{border-color:rgba(96,165,250,0.3)}
+.mode-card.mode-auto{border-color:rgba(16,163,127,0.3)}
+.mode-card.mode-full{border-color:rgba(248,113,113,0.3)}
+.mode-icon{font-size:24px;margin-bottom:8px}
+.mode-name{font-weight:700;margin-bottom:4px;font-size:13px}
+.mode-flag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);margin-bottom:8px}
+.mode-desc{font-size:12px;color:var(--text-muted);line-height:1.5}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:32px 0;text-align:center;color:var(--text-muted);font-size:12px}
+footer a{color:var(--amber);font-size:12px}
+
+/* ── FLOATING SIDEBAR ── */
+#sidebar{position:fixed;bottom:32px;right:24px;display:flex;flex-direction:column;gap:6px;z-index:100}
+@media(max-width:640px){#sidebar{display:none}}
+.sb-item{display:flex;gap:2px;position:relative}
+.sb-jump{display:flex;align-items:center;justify-content:center;width:46px;height:34px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm) 0 0 var(--radius-sm);border-right:none;cursor:pointer;font-size:16px;transition:background .2s,border-color .2s;text-decoration:none;color:var(--text)}
+.sb-jump:hover{background:var(--bg3);border-color:var(--amber);text-decoration:none}
+.sb-copy{display:flex;align-items:center;justify-content:center;width:34px;height:34px;background:var(--bg2);border:1px solid var(--border);border-radius:0 var(--radius-sm) var(--radius-sm) 0;cursor:pointer;font-size:12px;transition:background .2s,border-color .2s;color:var(--text-muted)}
+.sb-copy:hover{background:var(--bg3);border-color:var(--amber);color:var(--amber)}
+.sb-copy.copied{border-color:var(--green);color:var(--green)}
+.sb-tooltip{position:absolute;right:88px;top:50%;transform:translateY(-50%);background:var(--bg4);border:1px solid var(--border2);color:var(--text-dim);font-size:11px;padding:5px 10px;border-radius:var(--radius-sm);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;font-family:'DM Sans',sans-serif;font-weight:500}
+.sb-item:hover .sb-tooltip{opacity:1}
+.sb-divider{height:1px;background:var(--border);margin:4px 0}
+.sb-top{display:flex;align-items:center;justify-content:center;height:34px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;width:82px;transition:background .2s,border-color .2s;color:var(--text-muted)}
+.sb-top:hover{background:var(--bg3);border-color:var(--border2);color:var(--text)}
+
+/* ── MISC ── */
+.lead{color:var(--text-dim);font-size:15px;line-height:1.7;margin-bottom:16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--bg3);border:1px solid var(--border);color:var(--text-muted)}
+.spacer{height:12px}
+p+p{margin-top:10px}
+ul,ol{padding-left:20px;margin-top:8px}
+li{margin-bottom:5px;color:var(--text-dim);font-size:14px;line-height:1.6}
+strong{color:var(--text);font-weight:600}
+h4{font-size:13px;font-weight:600;color:var(--text-dim);margin-bottom:6px;margin-top:14px}
+</style>
+</head>
+<body>
+
+<!-- WHAT'S NEW -->
+<div id="whats-new-wrapper">
+  <button id="whats-new-toggle" onclick="toggleWN()" aria-expanded="true">
+    <span class="pulse-dot"></span>
+    <span class="wn-label">What's New</span>
+    <span class="wn-text">Codex CLI v0.130 (May 2026) landed. GPT-5.5 is default. Remote control headless mode added.</span>
+    <span class="wn-chevron" id="wn-chevron">▼</span>
+  </button>
+  <div id="whats-new-body" class="open">
+    <div class="wn-grid">
+      <div class="wn-card event">
+        <h4>🚀 Codex CLI Replit Guide v1.0</h4>
+        <p>First release of the Codex CLI in Replit guide. Covers AGENTS.md, approval modes, ChatGPT OAuth, session resumption, and the full daily workflow for Replit shell users.</p>
+      </div>
+      <div class="wn-card">
+        <h4>⚡ GPT-5.5 Now Default</h4>
+        <p>GPT-5.5 (400K context in Codex, launched April 23 2026) is now the recommended default model. Available on ChatGPT sign-in only.</p>
+      </div>
+      <div class="wn-card">
+        <h4>📋 AGENTS.md Scaffold</h4>
+        <p>Use <code>/init</code> inside a Codex session to auto-generate an AGENTS.md scaffold from your project. No more blank-page syndrome.</p>
+      </div>
+      <div class="wn-card">
+        <h4>🔄 Session Resume</h4>
+        <p><code>codex resume --last</code> picks up your most recent session instantly. No more starting from scratch after a Replit reload.</p>
+      </div>
+      <div class="wn-card">
+        <h4>🔒 SSH Auth for Replit</h4>
+        <p>Device-code flow means you can authenticate Codex from Replit shell without a browser. One command, one code, done.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header style="padding:48px 0 8px;text-align:center;border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px">
+      ⬡ JMF Dynamic Global &nbsp;&middot;&nbsp; Developer Tooling Guides
+    </div>
+    <h1 style="font-size:clamp(1.8rem,5vw,3rem);font-weight:700;line-height:1.2;margin-bottom:12px">
+      Codex CLI in Replit<br>
+      <span style="color:var(--amber)">Safe Prompt Guide</span>
+    </h1>
+    <p style="color:var(--text-muted);font-size:14px;max-width:600px;margin:0 auto 20px">
+      The practical field guide for using OpenAI Codex CLI inside Replit Shell. ChatGPT subscription auth, AGENTS.md, approval modes, and daily workflow prompts.
+    </p>
+    <div class="tag-list" style="justify-content:center">
+      <span class="tag">Codex CLI v0.130</span>
+      <span class="tag">May 2026</span>
+      <span class="tag">GPT-5.5</span>
+      <span class="tag">ChatGPT OAuth</span>
+      <span class="tag">Replit Shell</span>
+    </div>
+    <div style="margin-top:16px;font-size:12px;color:var(--text-muted)">
+      Sister guide to the <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a> &nbsp;&middot;&nbsp; Same workflow, different agent
+    </div>
+    <div style="margin-top:20px;padding-bottom:24px"></div>
+  </div>
+</header>
+
+<!-- NAV GRID -->
+<div id="nav-section">
+  <div class="container">
+    <div class="nav-grid">
+      <!-- Row 1: daily amber -->
+      <a href="#install" class="nav-btn amber-tint"><span class="nav-icon">⚙️</span>Install</a>
+      <a href="#kickoff" class="nav-btn amber-tint"><span class="nav-icon">☀️</span>Kick-Off</a>
+      <a href="#checkpoint" class="nav-btn amber-tint"><span class="nav-icon">⚡</span>Checkpoint</a>
+      <a href="#wrapup" class="nav-btn amber-tint"><span class="nav-icon">🌙</span>End-of-Day</a>
+      <!-- Row 2: colour-coded -->
+      <a href="#agents-md" class="nav-btn green-tint"><span class="nav-icon">📄</span>AGENTS.md</a>
+      <a href="#modes" class="nav-btn blue-tint"><span class="nav-icon">🔒</span>Approval Modes</a>
+      <a href="#commands" class="nav-btn purple-tint"><span class="nav-icon">💬</span>Slash Commands</a>
+      <a href="#troubleshoot" class="nav-btn red-tint"><span class="nav-icon">🔧</span>Troubleshoot</a>
+    </div>
+  </div>
+</div>
+
+<!-- WORKFLOW -->
+<div id="workflow-section">
+  <div class="container">
+    <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:10px">Daily Workflow</div>
+    <div class="workflow-flow">
+      <div class="wf-step"><span class="wf-icon">⚙️</span><span class="wf-label">Install once</span></div>
+      <span class="wf-arrow">→</span>
+      <div class="wf-step"><span class="wf-icon">🔑</span><span class="wf-label">Auth via ChatGPT</span></div>
+      <span class="wf-arrow">→</span>
+      <div class="wf-step"><span class="wf-icon">📄</span><span class="wf-label">Write AGENTS.md</span></div>
+      <span class="wf-arrow">→</span>
+      <div class="wf-step"><span class="wf-icon">☀️</span><span class="wf-label">Kick-Off prompt</span></div>
+      <span class="wf-arrow">→</span>
+      <div class="wf-step"><span class="wf-icon">⚡</span><span class="wf-label">Build &amp; checkpoint</span></div>
+      <span class="wf-arrow">→</span>
+      <div class="wf-step"><span class="wf-icon">🌙</span><span class="wf-label">End-of-day wrap</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- INSTALL -->
+<section id="install">
+  <div class="daily-section">
+    <div class="section-header">
+      <span class="section-icon">⚙️</span>
+      <h2>Install &amp; Auth</h2>
+      <span class="daily-pill">✦ Daily</span>
+    </div>
+    <p class="lead">One npm command installs Codex globally in your Replit shell. Authentication uses your existing ChatGPT subscription, zero extra cost.</p>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="banner banner-amber">
+    <span class="banner-icon">💡</span>
+    <div>Codex CLI is included in all ChatGPT plans (Plus $20/mo, Pro $100-$200/mo). Using OAuth means you pay nothing extra per token. API key mode is also supported but costs more for typical daily use.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="card recommended">
+    <span class="card-badge badge-recommended">✦ Start Here</span>
+    <h3>Fresh Install (Replit Shell)</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'npm i -g @openai/codex')">Copy</button></div>
+      <pre><code>npm i -g @openai/codex</code></pre>
+    </div>
+    <p style="font-size:13px;color:var(--text-muted);margin-top:10px">Requires Node.js 18+. Replit environments come with Node already. Codex CLI is built in Rust so it's fast, but installs via npm.</p>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3 style="margin-bottom:12px">Authentication</h3>
+
+  <div class="two-col">
+    <div class="card recommended">
+      <span class="card-badge badge-recommended">✦ Recommended for Replit</span>
+      <h3>Device Code Flow (SSH-safe)</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Replit shell runs over SSH, so a browser doesn't pop open. Use device-code auth instead: Codex prints a short code, you visit a URL on your phone or laptop, done.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex auth login --device')">Copy</button></div>
+        <pre><code>codex auth login --device</code></pre>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Visit the printed URL, enter the code, authorize with your ChatGPT account. Auth token is saved to <code>~/.codex/</code> and persists across Replit sessions.</p>
+    </div>
+    <div class="card legacy">
+      <span class="card-badge badge-legacy">Alternative: API Key</span>
+      <h3>OPENAI_API_KEY</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">If you have a platform.openai.com API key, set it as a Replit secret. Better for CI pipelines, but costs more per token than a ChatGPT subscription for normal use.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'# Add to Replit Secrets as OPENAI_API_KEY\n# then launch with:\ncodex')">Copy</button></div>
+        <pre><code># Add to Replit Secrets as OPENAI_API_KEY
+# then launch with:
+codex</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Verify Install</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex --version\ncodex auth status')">Copy</button></div>
+    <pre><code>codex --version
+codex auth status</code></pre>
+  </div>
+</section>
+
+<!-- AGENTS.MD -->
+<section id="agents-md">
+  <div class="section-header">
+    <span class="section-icon">📄</span>
+    <h2>AGENTS.md</h2>
+    <span style="background:var(--green-dim);border:1px solid rgba(74,222,128,0.25);color:var(--green);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px">CLAUDE.md Equivalent</span>
+  </div>
+
+  <p class="lead"><code>AGENTS.md</code> is Codex's answer to <code>CLAUDE.md</code>. It's the project context file that Codex reads before every task. Keep it accurate and it'll save you re-explaining things session after session.</p>
+
+  <div class="banner banner-blue">
+    <span class="banner-icon">ℹ️</span>
+    <div>Files closer to your working directory take priority. The load order is: <code>~/.codex/AGENTS.override.md</code> (global override), then <code>~/.codex/AGENTS.md</code> (global default), then git root up to current directory: <code>AGENTS.override.md</code>, then <code>AGENTS.md</code>. Max size is 32 KiB by default.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Three-File Setup (Recommended)</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">Same approach as the Claude Code guide. Split your context across three files to keep things manageable.</p>
+
+  <div class="card recommended">
+    <span class="card-badge badge-recommended">✦ Recommended Structure</span>
+    <div class="two-col">
+      <div>
+        <h4>AGENTS.md (project root)</h4>
+        <p style="font-size:12.5px;color:var(--text-muted)">Architecture, conventions, commands to always run. The stuff Codex needs every session.</p>
+      </div>
+      <div>
+        <h4>CONTEXT.md (project root)</h4>
+        <p style="font-size:12.5px;color:var(--text-muted)">Current sprint focus, recent decisions, what's in progress. Update this each day.</p>
+      </div>
+    </div>
+    <div style="margin-top:12px">
+      <h4>ROADMAP.md (project root)</h4>
+      <p style="font-size:12.5px;color:var(--text-muted)">Feature list and priorities. Reference Codex to it when planning work.</p>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <button class="collapse-trigger" onclick="toggleCollapse('agents-scaffold')">
+    <div class="ct-left">
+      <span>📋</span> Example AGENTS.md for a Node/React/PostgreSQL project
+      <span class="ct-tag">Template</span>
+    </div>
+    <span class="ct-chevron" id="agents-scaffold-chevron">▼</span>
+  </button>
+  <div class="collapse-body closed" id="agents-scaffold">
+    <div class="collapse-inner">
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyCode(this,`## Project: YourProjectName\n\n### Stack\n- Frontend: React 18 + TypeScript\n- Backend: Node.js / Express\n- Database: PostgreSQL (via Prisma or pg)\n- Hosting: Replit (dev), Vercel + Railway (prod)\n\n### Conventions\n- Use camelCase for JS/TS variables\n- Async/await over .then() chains\n- Component files: PascalCase.tsx\n- API route files: kebab-case.js\n\n### Commands\n- Start dev server: npm run dev\n- Run tests: npm test\n- Type check: npx tsc --noEmit\n\n### Rules\n- Never delete files without asking first\n- Always run npm test after modifying core logic\n- Keep .env variables in Replit Secrets, not hardcoded\n- Commit messages: conventional commits format\n\n### Context files\n- See CONTEXT.md for current sprint\n- See ROADMAP.md for feature priorities`)">Copy</button></div>
+        <pre><code>## Project: YourProjectName
+
+### Stack
+- Frontend: React 18 + TypeScript
+- Backend: Node.js / Express
+- Database: PostgreSQL (via Prisma or pg)
+- Hosting: Replit (dev), Vercel + Railway (prod)
+
+### Conventions
+- Use camelCase for JS/TS variables
+- Async/await over .then() chains
+- Component files: PascalCase.tsx
+- API route files: kebab-case.js
+
+### Commands
+- Start dev server: npm run dev
+- Run tests: npm test
+- Type check: npx tsc --noEmit
+
+### Rules
+- Never delete files without asking first
+- Always run npm test after modifying core logic
+- Keep .env variables in Replit Secrets, not hardcoded
+- Commit messages: conventional commits format
+
+### Context files
+- See CONTEXT.md for current sprint
+- See ROADMAP.md for feature priorities</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Auto-generate with /init</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Start a Codex session and run <code>/init</code> to have Codex scan your project and scaffold an AGENTS.md automatically. Good starting point, then edit from there.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'# Start a session in your project directory\ncodex\n\n# Then inside the session:\n/init')">Copy</button></div>
+    <pre><code># Start a session in your project directory
+codex
+
+# Then inside the session:
+/init</code></pre>
+  </div>
+</section>
+
+<!-- KICK-OFF -->
+<section id="kickoff">
+  <div class="daily-section">
+    <div class="section-header">
+      <span class="section-icon">☀️</span>
+      <h2>Morning Kick-Off Prompt</h2>
+      <span class="daily-pill">✦ Daily</span>
+    </div>
+    <p class="lead">Run this at the start of every session to orient Codex without re-explaining the whole project. It reads your AGENTS.md and CONTEXT.md, then asks what you want to work on.</p>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash (run in shell)</span><button class="copy-btn" id="kickoff-copy" onclick="copyCode(this,`codex \"Read AGENTS.md and CONTEXT.md first. Then confirm:\n1. The current project context you have loaded\n2. What was last worked on\n3. Any open issues or blockers you can see\n\nDo not start writing code yet. Wait for me to tell you what to work on today.\"`)">Copy</button></div>
+    <pre><code>codex "Read AGENTS.md and CONTEXT.md first. Then confirm:
+1. The current project context you have loaded
+2. What was last worked on
+3. Any open issues or blockers you can see
+
+Do not start writing code yet. Wait for me to tell you what to work on today."</code></pre>
+  </div>
+
+  <div class="banner banner-amber" style="margin-top:14px">
+    <span class="banner-icon">💡</span>
+    <div>If you're resuming a previous session (rather than starting fresh), use <code>codex resume --last</code> instead. Codex will reload the last session's context automatically. See the Checkpoint section below.</div>
+  </div>
+</section>
+
+<!-- CHECKPOINT / RESUME -->
+<section id="checkpoint">
+  <div class="daily-section">
+    <div class="section-header">
+      <span class="section-icon">⚡</span>
+      <h2>Checkpoint / Session Resume</h2>
+      <span class="daily-pill">✦ Daily</span>
+    </div>
+    <p class="lead">Codex sessions end when you close the shell. Unlike Claude Code, there's no <code>checkpoint</code> slash command, but Codex stores session history and lets you resume cleanly.</p>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="two-col">
+    <div class="card recommended">
+      <span class="card-badge badge-recommended">✦ Recommended</span>
+      <h3>Resume Last Session</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex resume --last')">Copy</button></div>
+        <pre><code>codex resume --last</code></pre>
+      </div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-top:10px">Picks up your most recent session. Codex reloads the conversation history and continues where you left off. Best option after a Replit reload or shell disconnect.</p>
+    </div>
+    <div class="card">
+      <h3>Pick From History</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex resume')">Copy</button></div>
+        <pre><code>codex resume</code></pre>
+      </div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-top:10px">Shows an interactive picker with your recent sessions. Useful if you've been running multiple projects and want to choose the right one.</p>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Mid-Session Compact (Context Management)</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">GPT-5.5 gives you a 400K context window in Codex, which is generous but not unlimited. If a session gets long, use <code>/compact</code> inside the session to compress history and free up context budget.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">slash command (inside session)</span><button class="copy-btn" onclick="copyCode(this,'/compact')">Copy</button></div>
+    <pre><code>/compact</code></pre>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Manual Checkpoint Prompt</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">There's no built-in checkpoint command like Claude Code's <code>checkpoint</code> keyword. Instead, ask Codex to summarise progress directly into your CONTEXT.md so you don't lose state.</p>
+  <div class="code-block" id="checkpoint-block">
+    <div class="code-header"><span class="code-lang">prompt (inside session)</span><button class="copy-btn" id="checkpoint-copy-btn" onclick="copyCode(this,`Pause. Update CONTEXT.md with:\n1. What we completed this session\n2. What is still in progress\n3. Any blockers or decisions made\n4. What to pick up next session\n\nKeep it concise, bullet points are fine.`)">Copy</button></div>
+    <pre><code>Pause. Update CONTEXT.md with:
+1. What we completed this session
+2. What is still in progress
+3. Any blockers or decisions made
+4. What to pick up next session
+
+Keep it concise, bullet points are fine.</code></pre>
+  </div>
+</section>
+
+<!-- END OF DAY -->
+<section id="wrapup">
+  <div class="daily-section">
+    <div class="section-header">
+      <span class="section-icon">🌙</span>
+      <h2>End-of-Day Wrap-Up</h2>
+      <span class="daily-pill">✦ Daily</span>
+    </div>
+    <p class="lead">Two-tier system. Quick checkpoint for short pauses, full wrap-up at end of day. Both update your context files so tomorrow's session starts cleanly.</p>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>⚡ Quick Checkpoint (mid-session pause)</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn" onclick="copyCode(this,'Quick checkpoint: summarise what we just completed and what is still in progress. Update CONTEXT.md.')">Copy</button></div>
+        <pre><code>Quick checkpoint: summarise what we just completed and what is still in progress. Update CONTEXT.md.</code></pre>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🌙 Full End-of-Day Wrap</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">prompt</span><button class="copy-btn" id="wrapup-copy-btn" onclick="copyCode(this,`End of day wrap-up. Please:\n1. Update CONTEXT.md with today's progress, decisions, and blockers\n2. Update ROADMAP.md if any priorities changed\n3. List the top 3 things to pick up tomorrow\n4. Flag any files that were changed today so I can review before committing\n\nDo not start any new work. Just wrap up and summarise.`)">Copy</button></div>
+        <pre><code>End of day wrap-up. Please:
+1. Update CONTEXT.md with today's progress, decisions, and blockers
+2. Update ROADMAP.md if any priorities changed
+3. List the top 3 things to pick up tomorrow
+4. Flag any files that were changed today so I can review before committing
+
+Do not start any new work. Just wrap up and summarise.</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="banner banner-green" style="margin-top:14px">
+    <span class="banner-icon">✓</span>
+    <div>After wrapping up, always review changed files before committing to GitHub. Even with approval modes active, Codex can make unexpected changes to files outside the scope of a task.</div>
+  </div>
+</section>
+
+<!-- APPROVAL MODES -->
+<section id="modes">
+  <div class="section-header">
+    <span class="section-icon">🔒</span>
+    <h2>Approval Modes</h2>
+  </div>
+
+  <p class="lead">Codex has three sandbox modes that control what it can do without asking. In Replit you're already inside a container, so <code>workspace-write</code> is the sweet spot for daily work.</p>
+
+  <div class="modes-grid">
+    <div class="mode-card mode-safe">
+      <div class="mode-icon">🔵</div>
+      <div class="mode-name">Read Only</div>
+      <div class="mode-flag">--sandbox read-only</div>
+      <div class="mode-desc">Codex can read files and suggest changes but cannot write anything. You approve every file edit individually. Slowest but safest for sensitive codebases.</div>
+    </div>
+    <div class="mode-card mode-auto">
+      <div class="mode-icon">🟡</div>
+      <div class="mode-name">Workspace Write</div>
+      <div class="mode-flag">--sandbox workspace-write</div>
+      <div class="mode-desc">Codex can read and write files in your project, but shell commands still need approval. Best for daily Replit work. Recommended default.</div>
+    </div>
+    <div class="mode-card mode-full">
+      <div class="mode-icon">🔴</div>
+      <div class="mode-name">Full Access</div>
+      <div class="mode-flag">--sandbox danger-full-access</div>
+      <div class="mode-desc">Codex can read, write, and run shell commands without approval. Use for trusted automation tasks. Not recommended for exploratory sessions.</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Approval Policy (separate from sandbox)</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">The approval policy controls when Codex asks for human confirmation regardless of sandbox mode.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">~/.codex/config.toml</span><button class="copy-btn" onclick="copyCode(this,`model = \"gpt-5.5\"\napproval_policy = \"on-request\"\nsandbox_mode = \"workspace-write\"\nweb_search = \"cached\"`)">Copy</button></div>
+    <pre><code>model = "gpt-5.5"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "cached"</code></pre>
+  </div>
+
+  <div class="spacer"></div>
+
+  <button class="collapse-trigger" onclick="toggleCollapse('profiles')">
+    <div class="ct-left">
+      <span>⚙️</span> Named Profiles (switch per-project)
+      <span class="ct-tag">Advanced</span>
+    </div>
+    <span class="ct-chevron" id="profiles-chevron">▼</span>
+  </button>
+  <div class="collapse-body closed" id="profiles">
+    <div class="collapse-inner">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Create named profiles in your config.toml and switch between them with <code>--profile name</code>. Useful if you work on multiple projects with different trust levels.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">config.toml</span><button class="copy-btn" onclick="copyCode(this,`[profiles.daily]\nmodel = \"gpt-5.5\"\napproval_policy = \"on-request\"\nsandbox_mode = \"workspace-write\"\n\n[profiles.safe]\napproval_policy = \"untrusted\"\nsandbox_mode = \"read-only\"\n\n[profiles.auto]\napproval_policy = \"never\"\nsandbox_mode = \"danger-full-access\"`)">Copy</button></div>
+        <pre><code>[profiles.daily]
+model = "gpt-5.5"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[profiles.safe]
+approval_policy = "untrusted"
+sandbox_mode = "read-only"
+
+[profiles.auto]
+approval_policy = "never"
+sandbox_mode = "danger-full-access"</code></pre>
+      </div>
+      <div class="code-block" style="margin-top:10px">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'# Load a profile:\ncodex --profile daily')">Copy</button></div>
+        <pre><code># Load a profile:
+codex --profile daily</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLASH COMMANDS (Skills equivalent) -->
+<section id="commands">
+  <div class="section-header">
+    <span class="section-icon">💬</span>
+    <h2>Slash Commands</h2>
+  </div>
+
+  <p class="lead">Codex's slash commands are the in-session equivalent of Claude Code's Skills. These run inside an active Codex session (after launching with <code>codex</code>).</p>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">/init</span>
+        <span class="skill-badge badge-interactive">Interactive</span>
+      </div>
+      <p class="skill-desc">Scans your project and auto-generates an AGENTS.md scaffold. Run this once when setting up a new project to save yourself writing the whole file from scratch.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">/model</span>
+        <span class="skill-badge badge-shortcut">Mid-session</span>
+      </div>
+      <p class="skill-desc">Switch models without leaving the session. Useful for dropping to a faster/cheaper model for repetitive tasks, or bumping up to GPT-5.5 for complex architecture decisions.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">/compact</span>
+        <span class="skill-badge badge-runtime">Context</span>
+      </div>
+      <p class="skill-desc">Compresses the session history to free up context budget. Run this when the conversation gets long to avoid hitting the 400K token limit mid-task.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">/goal</span>
+        <span class="skill-badge badge-config">Persistent</span>
+      </div>
+      <p class="skill-desc">Sets a persisted work goal for the session. Codex keeps this goal in mind across the conversation, which helps it avoid going off-track on long multi-step tasks.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">Alt+,</span>
+        <span class="skill-badge badge-shortcut">Shortcut</span>
+      </div>
+      <p class="skill-desc">Lower the reasoning effort level on the fly. Good when you want quick file edits without waiting for deep reasoning. Opposite: <code>Alt+.</code> raises effort.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">codex exec</span>
+        <span class="skill-badge badge-runtime">Non-interactive</span>
+      </div>
+      <p class="skill-desc">Run a one-shot Codex task from the shell without opening the interactive TUI. Great for quick scripted tasks or CI pipelines. Short form: <code>codex e</code></p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex exec \"run tests and fix any failures\"')">Copy</button></div>
+        <pre><code>codex exec "run tests and fix any failures"</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELS REFERENCE -->
+<section id="models">
+  <div class="section-header">
+    <span class="section-icon">🤖</span>
+    <h2>Models Reference</h2>
+  </div>
+
+  <div class="banner banner-amber">
+    <span class="banner-icon">💡</span>
+    <div>GPT-5.5 is only available via ChatGPT sign-in, not API key. This is why OAuth auth is worth setting up, especially if you already pay for a ChatGPT Plus/Pro sub.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <table class="ref-table">
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>Use Case</th>
+        <th>Access</th>
+        <th>Context (Codex)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>gpt-5.5</code></td>
+        <td>Complex coding, architecture, research</td>
+        <td>ChatGPT sign-in only</td>
+        <td>400K tokens</td>
+      </tr>
+      <tr>
+        <td><code>gpt-5.4</code></td>
+        <td>Strong reasoning, general tasks</td>
+        <td>All plans</td>
+        <td>128K tokens</td>
+      </tr>
+      <tr>
+        <td><code>gpt-5.4-mini</code></td>
+        <td>Fast, efficient, quick iterations</td>
+        <td>All plans</td>
+        <td>128K tokens</td>
+      </tr>
+      <tr>
+        <td><code>gpt-5.3-codex</code></td>
+        <td>Optimised for complex software engineering</td>
+        <td>All plans</td>
+        <td>128K tokens</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- QUICK START REFERENCE -->
+<section id="reference">
+  <div class="section-header">
+    <span class="section-icon">📊</span>
+    <h2>Quick Reference</h2>
+  </div>
+
+  <table class="ref-table">
+    <thead>
+      <tr>
+        <th>Concept</th>
+        <th>Claude Code Equivalent</th>
+        <th>Codex CLI Version</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Context file</td>
+        <td><code>CLAUDE.md</code></td>
+        <td><code>AGENTS.md</code></td>
+      </tr>
+      <tr>
+        <td>Install command</td>
+        <td><code>npm i -g @anthropic-ai/claude-code</code></td>
+        <td><code>npm i -g @openai/codex</code></td>
+      </tr>
+      <tr>
+        <td>Launch (interactive)</td>
+        <td><code>claude</code></td>
+        <td><code>codex</code></td>
+      </tr>
+      <tr>
+        <td>One-shot task</td>
+        <td><code>claude "task here"</code></td>
+        <td><code>codex exec "task here"</code></td>
+      </tr>
+      <tr>
+        <td>Autonomous mode</td>
+        <td><code>--dangerously-skip-permissions</code></td>
+        <td><code>--full-auto</code> or sandbox danger-full-access</td>
+      </tr>
+      <tr>
+        <td>Resume session</td>
+        <td><code>/resume</code></td>
+        <td><code>codex resume --last</code></td>
+      </tr>
+      <tr>
+        <td>Compress context</td>
+        <td>checkpoint / new session</td>
+        <td><code>/compact</code></td>
+      </tr>
+      <tr>
+        <td>Scaffold context file</td>
+        <td>write CLAUDE.md manually</td>
+        <td><code>/init</code></td>
+      </tr>
+      <tr>
+        <td>Config file</td>
+        <td><code>~/.claude/settings.json</code></td>
+        <td><code>~/.codex/config.toml</code></td>
+      </tr>
+      <tr>
+        <td>Auth model</td>
+        <td>API key / Anthropic subscription</td>
+        <td>ChatGPT OAuth (device-code for SSH) or API key</td>
+      </tr>
+      <tr>
+        <td>Cost with subscription</td>
+        <td>Zero (Max plan) or per-token (API)</td>
+        <td>Zero extra (ChatGPT Plus/Pro/Team)</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- WRITING A GOOD AGENTS.MD -->
+<section id="agents-tips">
+  <div class="section-header">
+    <span class="section-icon">✍️</span>
+    <h2>Writing a Good AGENTS.md</h2>
+  </div>
+
+  <button class="collapse-trigger" onclick="toggleCollapse('agents-tips-body')">
+    <div class="ct-left">
+      <span>📋</span> Tips for an AGENTS.md that actually works
+      <span class="ct-tag">Best Practice</span>
+    </div>
+    <span class="ct-chevron" id="agents-tips-body-chevron">▼</span>
+  </button>
+  <div class="collapse-body closed" id="agents-tips-body">
+    <div class="collapse-inner">
+      <ul style="margin:0">
+        <li><strong>Keep it factual, not aspirational.</strong> Document what the project IS, not what you hope it will be. Codex uses this as ground truth.</li>
+        <li><strong>Include commands it can run.</strong> List the actual test, lint, and build commands for your project. Codex will use them without being asked.</li>
+        <li><strong>Write explicit rules.</strong> "Never delete files without asking" is a valid rule. Put it in.</li>
+        <li><strong>Name your files and folders.</strong> If Codex knows your folder structure upfront it navigates faster and makes fewer wrong-directory errors.</li>
+        <li><strong>Stay under 32 KiB.</strong> The default max is 32 KiB. If your project is complex, split context across AGENTS.md + CONTEXT.md + ROADMAP.md rather than cramming it all in one file.</li>
+        <li><strong>Update it when things change.</strong> AGENTS.md is only useful if it's current. When you change your stack or rename a folder, update the file.</li>
+        <li><strong>Use override files sparingly.</strong> <code>AGENTS.override.md</code> at the global level can break project-specific context. Use it only for truly global personal preferences.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- COMMON MISTAKES -->
+<section id="mistakes">
+  <div class="section-header">
+    <span class="section-icon">⚠️</span>
+    <h2>Common Mistakes</h2>
+  </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <h3>1. Using browser OAuth flow in Replit shell</h3>
+    <p style="font-size:13px;color:var(--text-muted)">Running plain <code>codex auth login</code> tries to open a browser, which doesn't work over SSH. Always use <code>--device</code> flag in Replit shell: <code>codex auth login --device</code></p>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <h3>2. Starting fresh instead of resuming</h3>
+    <p style="font-size:13px;color:var(--text-muted)">After a Replit reload, running <code>codex</code> starts a brand new session with no history. Use <code>codex resume --last</code> to pick up where you left off. You won't lose context.</p>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <h3>3. No AGENTS.md in the project root</h3>
+    <p style="font-size:13px;color:var(--text-muted)">Without an AGENTS.md, Codex has zero project context and you'll spend the first 10 minutes of every session re-explaining your stack. Run <code>/init</code> once and clean it up manually.</p>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <h3>4. Full-access mode left on by default</h3>
+    <p style="font-size:13px;color:var(--text-muted)">Leaving <code>danger-full-access</code> as your permanent default means Codex can run arbitrary shell commands without asking. Fine for specific automation tasks, risky as a daily driver. Use <code>workspace-write</code> as your default.</p>
+  </div>
+  <div class="card">
+    <h3>5. AGENTS.md over 32 KiB</h3>
+    <p style="font-size:13px;color:var(--text-muted)">If your AGENTS.md hits the 32 KiB limit, Codex silently truncates it. Split content across CONTEXT.md and ROADMAP.md. Or bump the limit in config: <code>project_doc_max_bytes = 65536</code></p>
+  </div>
+</section>
+
+<!-- TROUBLESHOOT -->
+<section id="troubleshoot">
+  <div class="section-header">
+    <span class="section-icon">🔧</span>
+    <h2>Troubleshooting</h2>
+  </div>
+
+  <button class="collapse-trigger" onclick="toggleCollapse('ts-auth')">
+    <div class="ct-left">
+      <span>🔑</span> Auth loops / "not logged in" errors
+      <span class="ct-tag">Common</span>
+    </div>
+    <span class="ct-chevron" id="ts-auth-chevron">▼</span>
+  </button>
+  <div class="collapse-body closed" id="ts-auth">
+    <div class="collapse-inner">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">If Codex keeps asking you to log in, the auth token is probably corrupted or expired. Clear it and re-auth:</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex auth logout\ncodex auth login --device')">Copy</button></div>
+        <pre><code>codex auth logout
+codex auth login --device</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <button class="collapse-trigger" onclick="toggleCollapse('ts-approval')">
+    <div class="ct-left">
+      <span>❓</span> Approval prompts won't stop
+      <span class="ct-tag">Common</span>
+    </div>
+    <span class="ct-chevron" id="ts-approval-chevron">▼</span>
+  </button>
+  <div class="collapse-body closed" id="ts-approval">
+    <div class="collapse-inner">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">If Codex keeps asking "approve this?" for every file write, you're probably still on the default <code>read-only</code> sandbox. Switch to <code>workspace-write</code> either in config or on launch:</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex --sandbox workspace-write')">Copy</button></div>
+        <pre><code>codex --sandbox workspace-write</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <button class="collapse-trigger" onclick="toggleCollapse('ts-network')">
+    <div class="ct-left">
+      <span>🌐</span> Network access denied inside Codex
+      <span class="ct-tag">Common</span>
+    </div>
+    <span class="ct-chevron" id="ts-network-chevron">▼</span>
+  </button>
+  <div class="collapse-body closed" id="ts-network">
+    <div class="collapse-inner">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Codex blocks network by default inside its sandbox (OS-level Landlock on Linux). This is expected behaviour. If a task needs network access (e.g. running npm install), enable it in config or pass the flag:</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex --sandbox danger-full-access\n# or for specific network use, run npm install manually first')">Copy</button></div>
+        <pre><code>codex --sandbox danger-full-access
+# or for specific network use, run npm install manually first</code></pre>
+      </div>
+      <div class="banner banner-amber" style="margin-top:10px">
+        <span class="banner-icon">💡</span>
+        <div>In Replit specifically, you're already inside a container with controlled network access. The double-sandboxing can cause unexpected blocks. Running <code>danger-full-access</code> in Replit is relatively safe since the container itself is the outer sandbox.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <button class="collapse-trigger" onclick="toggleCollapse('ts-context')">
+    <div class="ct-left">
+      <span>📄</span> AGENTS.md not loading
+      <span class="ct-tag">Common</span>
+    </div>
+    <span class="ct-chevron" id="ts-context-chevron">▼</span>
+  </button>
+  <div class="collapse-body closed" id="ts-context">
+    <div class="collapse-inner">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Codex loads AGENTS.md from the git root and current directory. If it's not picking up your file, check:</p>
+      <ul>
+        <li>You're launching Codex from the correct directory (project root, not a subdirectory)</li>
+        <li>The file is named exactly <code>AGENTS.md</code> (case-sensitive)</li>
+        <li>The file is under 32 KiB (check with <code>wc -c AGENTS.md</code>)</li>
+        <li>You don't have a conflicting <code>~/.codex/AGENTS.override.md</code> that's overriding it</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLE AGENTS.MD -->
+<section id="example-agents">
+  <div class="section-header">
+    <span class="section-icon">📁</span>
+    <h2>Example AGENTS.md (Full)</h2>
+  </div>
+
+  <button class="collapse-trigger" onclick="toggleCollapse('example-agents-body')">
+    <div class="ct-left">
+      <span>📄</span> Full example for a Node.js SaaS project
+      <span class="ct-tag">Copy-paste ready</span>
+    </div>
+    <span class="ct-chevron" id="example-agents-body-chevron">▼</span>
+  </button>
+  <div class="collapse-body closed" id="example-agents-body">
+    <div class="collapse-inner">
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">AGENTS.md</span><button class="copy-btn" onclick="copyCode(this,`## Project: MyApp\n\n### Stack\n- Frontend: React 18 + TypeScript, Tailwind CSS\n- Backend: Node.js 20 + Express\n- Database: PostgreSQL (via node-postgres / pg)\n- Auth: JWT tokens stored in httpOnly cookies\n- Hosting: Replit (dev), Railway (prod API), Vercel (prod frontend)\n\n### Folder structure\n- /src/components - React components\n- /src/pages - Page-level components\n- /src/api - Express route handlers\n- /src/db - Database queries and schema\n- /src/lib - Shared utilities\n\n### Commands\n- Start dev: npm run dev\n- Run tests: npm test\n- Type check: npx tsc --noEmit\n- Lint: npm run lint\n\n### Coding conventions\n- Async/await, never .then() chains\n- camelCase for variables and functions\n- PascalCase for components and types\n- snake_case for database column names\n- No inline styles, use Tailwind classes only\n\n### Hard rules\n- Never delete files without asking first\n- Never hardcode secrets or API keys\n- Always run tests before marking a task done\n- Keep Replit Secrets as the source for env vars\n- Commit messages use conventional commits format\n\n### Context files\n- CONTEXT.md: current sprint focus and what is in progress\n- ROADMAP.md: feature backlog and priorities`)">Copy</button></div>
+        <pre><code>## Project: MyApp
+
+### Stack
+- Frontend: React 18 + TypeScript, Tailwind CSS
+- Backend: Node.js 20 + Express
+- Database: PostgreSQL (via node-postgres / pg)
+- Auth: JWT tokens stored in httpOnly cookies
+- Hosting: Replit (dev), Railway (prod API), Vercel (prod frontend)
+
+### Folder structure
+- /src/components - React components
+- /src/pages - Page-level components
+- /src/api - Express route handlers
+- /src/db - Database queries and schema
+- /src/lib - Shared utilities
+
+### Commands
+- Start dev: npm run dev
+- Run tests: npm test
+- Type check: npx tsc --noEmit
+- Lint: npm run lint
+
+### Coding conventions
+- Async/await, never .then() chains
+- camelCase for variables and functions
+- PascalCase for components and types
+- snake_case for database column names
+- No inline styles, use Tailwind classes only
+
+### Hard rules
+- Never delete files without asking first
+- Never hardcode secrets or API keys
+- Always run tests before marking a task done
+- Keep Replit Secrets as the source for env vars
+- Commit messages use conventional commits format
+
+### Context files
+- CONTEXT.md: current sprint focus and what is in progress
+- ROADMAP.md: feature backlog and priorities</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHANGELOG -->
+<section id="changelog">
+  <div class="section-header">
+    <span class="section-icon">📋</span>
+    <h2>Changelog</h2>
+  </div>
+
+  <button class="collapse-trigger" onclick="toggleCollapse('changelog-body')">
+    <div class="ct-left">
+      <span>📋</span> Version history
+      <span class="ct-tag">Changelog</span>
+    </div>
+    <span class="ct-chevron" id="changelog-body-chevron">▼</span>
+  </button>
+  <div class="collapse-body closed" id="changelog-body">
+    <div class="collapse-inner">
+      <table class="ref-table">
+        <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>v1.0</td><td>May 2026</td><td>Initial release. Covers Codex CLI v0.130, GPT-5.5, AGENTS.md, approval modes, device-code auth for Replit.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div style="margin-bottom:12px;font-size:20px">⬡</div>
+    <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
+    <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
+  </div>
+</footer>
+
+<!-- FLOATING SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-item">
+    <a href="#install" class="sb-jump">⚙️</a>
+    <button class="sb-copy" onclick="sbCopy(this,'npm i -g @openai/codex')">📋</button>
+    <div class="sb-tooltip">Install Codex CLI</div>
+  </div>
+  <div class="sb-item">
+    <a href="#kickoff" class="sb-jump">☀️</a>
+    <button class="sb-copy" id="sb-kickoff" onclick="sbCopy(this,'codex \"Read AGENTS.md and CONTEXT.md first. Then confirm:\\n1. The current project context you have loaded\\n2. What was last worked on\\n3. Any open issues or blockers you can see\\n\\nDo not start writing code yet. Wait for me to tell you what to work on today.\"')">📋</button>
+    <div class="sb-tooltip">Kick-Off Prompt</div>
+  </div>
+  <div class="sb-item">
+    <a href="#checkpoint" class="sb-jump">⚡</a>
+    <button class="sb-copy" onclick="sbCopy(this,'Pause. Update CONTEXT.md with:\\n1. What we completed this session\\n2. What is still in progress\\n3. Any blockers or decisions made\\n4. What to pick up next session')">📋</button>
+    <div class="sb-tooltip">Checkpoint Prompt</div>
+  </div>
+  <div class="sb-item">
+    <a href="#wrapup" class="sb-jump">🌙</a>
+    <button class="sb-copy" onclick="sbCopy(this,'End of day wrap-up. Please:\\n1. Update CONTEXT.md with today\\'s progress, decisions, and blockers\\n2. Update ROADMAP.md if any priorities changed\\n3. List the top 3 things to pick up tomorrow\\n4. Flag any files that were changed today so I can review before committing\\n\\nDo not start any new work. Just wrap up and summarise.')">📋</button>
+    <div class="sb-tooltip">End-of-Day Wrap</div>
+  </div>
+  <div class="sb-divider"></div>
+  <button class="sb-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
+</div>
+
+<script>
+// What's New toggle
+function toggleWN() {
+  const body = document.getElementById('whats-new-body');
+  const chevron = document.getElementById('wn-chevron');
+  if (body.classList.contains('open')) {
+    body.classList.remove('open');
+    body.classList.add('closed');
+    chevron.textContent = '▶';
+  } else {
+    body.classList.remove('closed');
+    body.classList.add('open');
+    chevron.textContent = '▼';
+  }
+}
+
+// Collapsibles
+function toggleCollapse(id) {
+  const body = document.getElementById(id);
+  const chevron = document.getElementById(id + '-chevron');
+  if (body.classList.contains('open')) {
+    body.classList.remove('open');
+    body.classList.add('closed');
+    if (chevron) chevron.textContent = '▶';
+  } else {
+    body.classList.remove('closed');
+    body.classList.add('open');
+    if (chevron) chevron.textContent = '▼';
+  }
+}
+
+// Copy button
+function copyCode(btn, text) {
+  const decoded = text.replace(/\\n/g, '\n').replace(/\\'/g, "'").replace(/\\"/g, '"');
+  navigator.clipboard.writeText(decoded).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = decoded;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  const orig = btn.textContent;
+  btn.textContent = '✓ Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.textContent = orig;
+    btn.classList.remove('copied');
+  }, 2000);
+}
+
+// Sidebar copy (mini, just shows ✓)
+function sbCopy(btn, text) {
+  const decoded = text.replace(/\\n/g, '\n').replace(/\\'/g, "'").replace(/\\"/g, '"');
+  navigator.clipboard.writeText(decoded).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = decoded;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  const orig = btn.textContent;
+  btn.textContent = '✓';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.textContent = orig;
+    btn.classList.remove('copied');
+  }, 2000);
+}
+</script>
+</body>
+</html>
