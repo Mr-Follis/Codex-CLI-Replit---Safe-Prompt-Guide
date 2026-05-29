@@ -530,89 +530,134 @@ codex doctor</code></pre>
   <div class="section-header">
     <span class="section-icon">🆕</span>
     <h2>First-Time Setup</h2>
-    <span style="background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px">Once per project</span>
+    <span style="background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px">Two prompts</span>
   </div>
 
-  <p class="lead">If this is your first time setting up Codex on a Replit project, work through these two collapsibles in order. After that, your daily workflow is just the Kick-Off / Checkpoint / Wrap-Up loop.</p>
+  <p class="lead">Getting a fresh Replit project ready for Codex is just two steps: one shell command for git, and one prompt you hand to Codex that builds all your context files at once. After that, your daily workflow is just the Kick-Off / Checkpoint / Wrap-Up loop.</p>
 
   <div class="banner banner-blue">
     <span class="banner-icon">ℹ️</span>
-    <div>This whole section only needs to be done once per Replit project. Codex auth itself persists in <code>~/.codex/</code> across sessions, and your AGENTS.md / CONTEXT.md / ROADMAP.md live in the repo, so once they're in place you're set.</div>
+    <div>Only needed once per project. Codex auth persists in <code>~/.codex/</code> across sessions, and your AGENTS.md / CONTEXT.md / ROADMAP.md live in the repo, so once they're in place you're set.</div>
   </div>
 
   <div class="spacer"></div>
 
-  <!-- GitHub Setup -->
-  <button class="collapse-trigger" onclick="toggleCollapse('first-time-github')">
-    <div class="ct-left">
-      <span>⚙️</span> 1. First-Time GitHub Setup
-      <span class="ct-tag">once per project</span>
-    </div>
-    <span class="ct-chevron" id="first-time-github-chevron">▶</span>
-  </button>
-  <div class="collapse-body closed" id="first-time-github">
-    <div class="collapse-inner">
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Connect your Replit project to a GitHub repo so Codex can commit and push your work safely. Do this once, then forget about it.</p>
+  <!-- STEP 1 -->
+  <div class="card recommended">
+    <span class="card-badge badge-recommended">★ Step 1 — Shell</span>
+    <h3>Connect the project to GitHub</h3>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">First create an empty repo at <a href="https://github.com/new" target="_blank">github.com/new</a> (no README, no gitignore, no license). Then paste this one block into the Replit Shell, edit the three values at the top, and run it. It configures git, links the remote, and pushes your first commit in one go.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash (run in Replit Shell)</span><button class="copy-btn" onclick="copyCode(this,`# --- edit these three lines ---\ngit config --global user.name \"Your Name\"\ngit config --global user.email \"you@example.com\"\nREPO_URL=\"https://github.com/your-user/your-repo.git\"\n# -------------------------------\n\ngit init\ngit branch -M main\ngit remote add origin \"$REPO_URL\"\ngit add .\ngit commit -m \"initial commit\"\ngit push -u origin main`)">Copy</button></div>
+      <pre><code># --- edit these three lines ---
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+REPO_URL="https://github.com/your-user/your-repo.git"
+# -------------------------------
 
-      <h4>Step 1: Configure git identity</h4>
-      <div class="code-block">
-        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'git config --global user.name \"Your Name\"\ngit config --global user.email \"you@example.com\"')">Copy</button></div>
-        <pre><code>git config --global user.name "Your Name"
-git config --global user.email "you@example.com"</code></pre>
-      </div>
-
-      <h4>Step 2: Create a GitHub repo</h4>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Go to <a href="https://github.com/new" target="_blank">github.com/new</a> and create a new repository. Leave it empty (no README, no gitignore, no license). Copy the HTTPS clone URL.</p>
-
-      <h4>Step 3: Initialise and connect</h4>
-      <div class="code-block">
-        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'git init\ngit branch -M main\ngit remote add origin https://github.com/your-user/your-repo.git')">Copy</button></div>
-        <pre><code>git init
+git init
 git branch -M main
-git remote add origin https://github.com/your-user/your-repo.git</code></pre>
-      </div>
+git remote add origin "$REPO_URL"
+git add .
+git commit -m "initial commit"
+git push -u origin main</code></pre>
+    </div>
+    <div class="banner banner-amber" style="margin-top:12px">
+      <span class="banner-icon">💡</span>
+      <div>When prompted for a password on push, use a Personal Access Token, not your GitHub password (disabled since 2021). Make one at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> with <code>repo</code> scope. Store it as a Replit Secret named <code>GITHUB_TOKEN</code> to avoid re-entering it.</div>
+    </div>
+  </div>
 
-      <h4>Step 4: First commit and push</h4>
+  <div class="spacer"></div>
+
+  <!-- STEP 2 -->
+  <div class="card recommended">
+    <span class="card-badge badge-recommended">★ Step 2 — Codex</span>
+    <h3>Let Codex build your context files</h3>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Launch <code>codex</code> in your project root, then paste this single prompt. Codex inspects your project and writes all three context files plus a <code>.gitignore</code>, then commits them. One prompt does what used to be eight steps.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">paste into Codex</span><button class="copy-btn" onclick="copyCode(this,`Set up this project's context files for our ongoing work together. Please:\n\n1. Inspect the codebase (languages, frameworks, folder structure, package files, scripts) so the files reflect reality, not guesses.\n\n2. Create AGENTS.md with: the stack, folder structure, the commands to run (dev/test/lint/build), coding conventions you can infer, and these hard rules: never delete files without asking, never hardcode secrets or API keys (always read from environment variables via Replit Secrets), always run tests after changing core logic, and reference CONTEXT.md and ROADMAP.md.\n\n3. Create CONTEXT.md with sections: Current Status, Current Sprint Focus, Recent Decisions, Known Issues, and Last Checkpoint. Fill in what you can from the current state, leave the rest as starting placeholders.\n\n4. Create ROADMAP.md with Phase 1 / Phase 2 / Phase 3 headings and a Stretch Goals section, seeded with sensible next steps based on what the project looks like.\n\n5. Create a .gitignore appropriate for this stack that excludes secrets (.env and variants), dependencies, build output, Codex session files, Replit cruft, logs, and editor folders.\n\n6. Once all four files exist, stage them and commit with the message \"add: project context files and gitignore for Codex\", then push.\n\nShow me each file before committing so I can confirm.`)">Copy</button></div>
+      <pre><code>Set up this project's context files for our ongoing work
+together. Please:
+
+1. Inspect the codebase (languages, frameworks, folder
+   structure, package files, scripts) so the files reflect
+   reality, not guesses.
+
+2. Create AGENTS.md with: the stack, folder structure, the
+   commands to run (dev/test/lint/build), coding conventions
+   you can infer, and these hard rules: never delete files
+   without asking, never hardcode secrets or API keys (always
+   read from environment variables via Replit Secrets), always
+   run tests after changing core logic, and reference
+   CONTEXT.md and ROADMAP.md.
+
+3. Create CONTEXT.md with sections: Current Status, Current
+   Sprint Focus, Recent Decisions, Known Issues, and Last
+   Checkpoint. Fill in what you can, leave the rest as
+   starting placeholders.
+
+4. Create ROADMAP.md with Phase 1 / Phase 2 / Phase 3 headings
+   and a Stretch Goals section, seeded with sensible next
+   steps based on what the project looks like.
+
+5. Create a .gitignore for this stack that excludes secrets
+   (.env and variants), dependencies, build output, Codex
+   session files, Replit cruft, logs, and editor folders.
+
+6. Once all four files exist, stage them and commit with the
+   message "add: project context files and gitignore for
+   Codex", then push.
+
+Show me each file before committing so I can confirm.</code></pre>
+    </div>
+    <div class="banner banner-amber" style="margin-top:12px">
+      <span class="banner-icon">💡</span>
+      <div>For Codex to write files and push, launch it with <code>codex --sandbox workspace-write</code> (or your <code>daily</code> profile). If it can't push due to auth, it'll create the files anyway, you can push manually with the Step 1 token.</div>
+    </div>
+    <div class="banner banner-green" style="margin-top:10px">
+      <span class="banner-icon">✓</span>
+      <div>That's it. From here on, every session just starts with the Morning Kick-Off prompt below.</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- GRANULAR FALLBACK -->
+  <button class="collapse-trigger" onclick="toggleCollapse('first-time-manual')">
+    <div class="ct-left">
+      <span>🔧</span> Prefer to do it step by step?
+      <span class="ct-tag">manual path</span>
+    </div>
+    <span class="ct-chevron" id="first-time-manual-chevron">▶</span>
+  </button>
+  <div class="collapse-body closed" id="first-time-manual">
+    <div class="collapse-inner">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">If you'd rather create each file yourself rather than letting Codex do it, here are the individual steps and templates.</p>
+
+      <h4>Git setup, one command at a time</h4>
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'git add .\ngit commit -m \"initial commit\"\ngit push -u origin main')">Copy</button></div>
-        <pre><code>git add .
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'git config --global user.name \"Your Name\"\ngit config --global user.email \"you@example.com\"\ngit init\ngit branch -M main\ngit remote add origin https://github.com/your-user/your-repo.git\ngit add .\ngit commit -m \"initial commit\"\ngit push -u origin main')">Copy</button></div>
+        <pre><code>git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+git init
+git branch -M main
+git remote add origin https://github.com/your-user/your-repo.git
+git add .
 git commit -m "initial commit"
 git push -u origin main</code></pre>
       </div>
 
-      <div class="banner banner-amber" style="margin-top:12px">
-        <span class="banner-icon">💡</span>
-        <div>GitHub disabled password auth for git push back in 2021. Use a Personal Access Token instead: <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> → Generate new token (classic) → tick <code>repo</code> scope → use the token as your password when prompted. Replit can store it as a Secret named <code>GITHUB_TOKEN</code> for reuse.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <!-- Project Files Setup -->
-  <button class="collapse-trigger" onclick="toggleCollapse('first-time-files')">
-    <div class="ct-left">
-      <span>📄</span> 2. First-Time Project Files (AGENTS.md + CONTEXT.md + ROADMAP.md)
-      <span class="ct-tag">once per project</span>
-    </div>
-    <span class="ct-chevron" id="first-time-files-chevron">▶</span>
-  </button>
-  <div class="collapse-body closed" id="first-time-files">
-    <div class="collapse-inner">
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Codex reads three files at the start of every session. AGENTS.md never changes much (your stack, your rules). CONTEXT.md and ROADMAP.md update as the project evolves. Set up all three now so the Kick-Off prompt has something to read.</p>
-
-      <h4>Step 1: Scaffold AGENTS.md with /init</h4>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Launch Codex in your project root and run the built-in scaffolder. It scans your files and produces a starting AGENTS.md based on what it finds.</p>
+      <h4>Scaffold AGENTS.md with /init</h4>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:8px">Launch Codex and run the built-in scaffolder, then edit to taste. See the Example AGENTS.md at the bottom of the page for a full template.</p>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex\n# then inside the session:\n/init')">Copy</button></div>
         <pre><code>codex
 # then inside the session:
 /init</code></pre>
       </div>
-      <p style="font-size:12.5px;color:var(--text-muted);margin-top:8px">Review the generated AGENTS.md and edit it to match how you actually work. See the AGENTS.md section below for guidance, or jump to the Example AGENTS.md at the bottom of the page for a full template.</p>
 
-      <h4>Step 2: Create CONTEXT.md</h4>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">CONTEXT.md tracks what's actively in progress. Start small, it'll fill out as you work.</p>
+      <h4>CONTEXT.md template</h4>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">CONTEXT.md</span><button class="copy-btn" onclick="copyCode(this,`# Context\n\n## Current Status\nProject just started. Nothing built yet.\n\n## Current Sprint Focus\n- [ ] Decide on tech stack details\n- [ ] Set up basic project structure\n- [ ] First working endpoint\n\n## Recent Decisions\nNone yet.\n\n## Known Issues\nNone yet.\n\n## Last Checkpoint\nNever`)">Copy</button></div>
         <pre><code># Context
@@ -635,8 +680,7 @@ None yet.
 Never</code></pre>
       </div>
 
-      <h4>Step 3: Create ROADMAP.md</h4>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">ROADMAP.md is your forward-looking plan. Phases, priorities, milestones, anything that helps Codex understand where the project is going.</p>
+      <h4>ROADMAP.md template</h4>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">ROADMAP.md</span><button class="copy-btn" onclick="copyCode(this,`# Roadmap\n\n## Phase 1: Foundation\n- [ ] Project scaffolding\n- [ ] Database schema\n- [ ] Auth flow\n\n## Phase 2: Core Features\n- [ ] Feature A\n- [ ] Feature B\n- [ ] Feature C\n\n## Phase 3: Polish\n- [ ] Performance optimisation\n- [ ] Testing coverage\n- [ ] Deployment\n\n## Stretch Goals\n- Idea 1\n- Idea 2`)">Copy</button></div>
         <pre><code># Roadmap
@@ -661,17 +705,12 @@ Never</code></pre>
 - Idea 2</code></pre>
       </div>
 
-      <h4>Step 4: Commit everything</h4>
+      <h4>Commit the files</h4>
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'git add AGENTS.md CONTEXT.md ROADMAP.md\ngit commit -m \"add: project context files for Codex\"\ngit push')">Copy</button></div>
-        <pre><code>git add AGENTS.md CONTEXT.md ROADMAP.md
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'git add AGENTS.md CONTEXT.md ROADMAP.md .gitignore\ngit commit -m \"add: project context files for Codex\"\ngit push')">Copy</button></div>
+        <pre><code>git add AGENTS.md CONTEXT.md ROADMAP.md .gitignore
 git commit -m "add: project context files for Codex"
 git push</code></pre>
-      </div>
-
-      <div class="banner banner-green" style="margin-top:12px">
-        <span class="banner-icon">✓</span>
-        <div>You're set. From now on, every session starts with the Morning Kick-Off prompt below. Codex reads all three files and you're working in seconds, not minutes.</div>
       </div>
     </div>
   </div>
