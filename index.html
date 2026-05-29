@@ -91,6 +91,15 @@ a:hover{text-decoration:underline}
 code,pre{font-family:'JetBrains Mono',monospace}
 img,svg{max-width:100%;height:auto}
 
+/* ── SISTER GUIDE BAR ── */
+#sister-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:7px 16px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:12.5px;font-weight:500;color:var(--text-dim);text-decoration:none;transition:background .2s}
+#sister-bar:hover{background:var(--bg4);text-decoration:none}
+#sister-bar:hover .sister-arrow{transform:translateX(3px)}
+.sister-label{color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.sister-text{color:var(--amber)}
+.sister-arrow{color:var(--amber);transition:transform .2s;font-weight:700}
+@media(max-width:480px){.sister-label{display:none}}
+
 /* ── WHAT'S NEW BANNER ── */
 #whats-new-wrapper{background:linear-gradient(135deg,rgba(74,222,128,0.06),rgba(74,222,128,0.02));border-bottom:1px solid rgba(74,222,128,0.15)}
 #whats-new-toggle{width:100%;display:flex;align-items:center;gap:10px;padding:10px clamp(16px,4vw,48px);background:transparent;border:none;cursor:pointer;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500}
@@ -317,6 +326,13 @@ pre code{white-space:pre}
 </style>
 </head>
 <body>
+
+<!-- SISTER GUIDE BAR -->
+<a id="sister-bar" href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/">
+  <span class="sister-label">Also available</span>
+  <span class="sister-text">Claude Code + Replit Shell Safe Prompt Guide</span>
+  <span class="sister-arrow">→</span>
+</a>
 
 <!-- WHAT'S NEW -->
 <div id="whats-new-wrapper">
