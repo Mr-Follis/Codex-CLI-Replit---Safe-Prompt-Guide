@@ -431,6 +431,14 @@ pre code{white-space:pre}
 
 <div class="container">
 
+<!-- ORIENTATION -->
+<section id="orientation" style="padding-top:32px;padding-bottom:0;border:none">
+  <div class="banner banner-purple">
+    <span class="banner-icon">🧭</span>
+    <div><strong>Which Codex is this?</strong> OpenAI ships Codex in three flavours: the <strong>CLI</strong> (terminal agent, what this guide covers), <strong>Codex Cloud</strong> (server-side tasks run on OpenAI infrastructure), and the <strong>IDE extension</strong> (VS Code / Cursor). This guide is specifically the <strong>CLI running inside Replit's Shell tab</strong>, authenticated with your ChatGPT subscription. If you're using the cloud or IDE versions, some commands here won't apply.</div>
+  </div>
+</section>
+
 <!-- INSTALL -->
 <section id="install">
   <div class="daily-section">
@@ -649,6 +657,132 @@ git push</code></pre>
         <div>You're set. From now on, every session starts with the Morning Kick-Off prompt below. Codex reads all three files and you're working in seconds, not minutes.</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- SAFETY / GITIGNORE -->
+<section id="safety">
+  <div class="section-header">
+    <span class="section-icon">🛡️</span>
+    <h2>Safety &amp; .gitignore</h2>
+    <span style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);color:var(--red);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px">Read this</span>
+  </div>
+
+  <p class="lead">Codex in <code>workspace-write</code> or <code>danger-full-access</code> can touch any file in your project, and it commits whatever you tell it to. A good <code>.gitignore</code> is your seatbelt: it stops secrets, build junk, and session files from ever reaching GitHub.</p>
+
+  <div class="banner banner-red">
+    <span class="banner-icon">⚠️</span>
+    <div>The single most common mistake is committing a <code>.env</code> file with live API keys. Once it's pushed to a public repo, treat those keys as compromised even if you delete the file later, git history keeps them. Set up <code>.gitignore</code> before your first commit, not after.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Starter .gitignore for a Node / React / Replit project</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">.gitignore</span><button class="copy-btn" onclick="copyCode(this,`# Secrets and environment\n.env\n.env.*\n*.pem\n*.key\nsecrets.json\n\n# Dependencies\nnode_modules/\n.pnpm-store/\n\n# Build output\ndist/\nbuild/\n.next/\n.vite/\n\n# Codex / agent session files\n.codex/\n*.session.jsonl\n\n# Replit\n.replit\nreplit.nix\n.config/\n.upm/\n.cache/\n\n# Logs and OS cruft\n*.log\nnpm-debug.log*\n.DS_Store\nThumbs.db\n\n# Editor\n.vscode/\n.idea/`)">Copy</button></div>
+    <pre><code># Secrets and environment
+.env
+.env.*
+*.pem
+*.key
+secrets.json
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+.next/
+.vite/
+
+# Codex / agent session files
+.codex/
+*.session.jsonl
+
+# Replit
+.replit
+replit.nix
+.config/
+.upm/
+.cache/
+
+# Logs and OS cruft
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/</code></pre>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Where secrets should actually live</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Never hardcode keys in your code or AGENTS.md. Use Replit Secrets (the lock icon in the sidebar), which inject as environment variables at runtime. Reference them in code as <code>process.env.YOUR_KEY</code>, never the literal value.</p>
+
+  <div class="banner banner-amber">
+    <span class="banner-icon">💡</span>
+    <div>Add a rule to your AGENTS.md so Codex respects this automatically: <code>Never hardcode secrets or API keys. Always read them from environment variables via Replit Secrets.</code> Codex will then refuse to inline a key even if you ask it to in passing.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>If you already committed a secret</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Rotate the key immediately at the provider (regenerate it so the old one stops working). Removing it from git history is secondary, the rotation is what actually protects you. Then add the file to <code>.gitignore</code> and commit that.</p>
+</section>
+
+<!-- MCP SETUP -->
+<section id="mcp">
+  <div class="section-header">
+    <span class="section-icon">🔌</span>
+    <h2>Connecting MCP Servers</h2>
+    <span style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25);color:var(--purple);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px">v0.134 updated</span>
+  </div>
+
+  <p class="lead">MCP (Model Context Protocol) servers give Codex extra tools: database access, web search, third-party APIs, your own custom tooling. v0.134 added per-server environment targeting and OAuth support for streamable HTTP servers, so the setup is cleaner than it used to be.</p>
+
+  <h3>Add a server to config.toml</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">MCP servers are declared in <code>~/.codex/config.toml</code> under <code>[mcp_servers.NAME]</code> blocks. Each one can be a local command (stdio) or a remote HTTP endpoint.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">~/.codex/config.toml</span><button class="copy-btn" onclick="copyCode(this,`# Local stdio server (runs as a subprocess)\n[mcp_servers.filesystem]\ncommand = \"npx\"\nargs = [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/home/runner/workspace\"]\n\n# Remote streamable HTTP server with OAuth (v0.134+)\n[mcp_servers.my_api]\nurl = \"https://mcp.example.com/sse\"\nbearer_token_env_var = \"MY_API_TOKEN\"\n\n# Per-server environment targeting (v0.134+)\n[mcp_servers.database]\ncommand = \"npx\"\nargs = [\"-y\", \"@modelcontextprotocol/server-postgres\"]\nenv = { DATABASE_URL = \"\\${DATABASE_URL}\" }`)">Copy</button></div>
+    <pre><code># Local stdio server (runs as a subprocess)
+[mcp_servers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "/home/runner/workspace"]
+
+# Remote streamable HTTP server with OAuth (v0.134+)
+[mcp_servers.my_api]
+url = "https://mcp.example.com/sse"
+bearer_token_env_var = "MY_API_TOKEN"
+
+# Per-server environment targeting (v0.134+)
+[mcp_servers.database]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-postgres"]
+env = { DATABASE_URL = "${DATABASE_URL}" }</code></pre>
+  </div>
+
+  <div class="banner banner-blue" style="margin-top:12px">
+    <span class="banner-icon">ℹ️</span>
+    <div>Use <code>bearer_token_env_var</code> and <code>env</code> rather than pasting tokens directly into config.toml. Store the actual values as Replit Secrets so they never end up in a file that could be committed.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Verify your MCP servers loaded</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">After editing config.toml, <code>codex doctor</code> reports which MCP servers connected and which failed, with error details. Run it before assuming a tool is unavailable.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex doctor')">Copy</button></div>
+    <pre><code>codex doctor</code></pre>
+  </div>
+
+  <div class="banner banner-amber" style="margin-top:12px">
+    <span class="banner-icon">💡</span>
+    <div>In Replit, stdio servers that need network access (like <code>npx</code> fetching a package) can be blocked by Codex's sandbox. If a server fails to start, try launching Codex with <code>--sandbox danger-full-access</code> for that session, the Replit container is itself the outer sandbox so it stays reasonably safe.</div>
   </div>
 </section>
 
@@ -1040,6 +1174,28 @@ codex --profile daily</code></pre>
       </div>
     </div>
   </div>
+
+  <div class="spacer"></div>
+
+  <h3>TUI Keyboard Shortcuts</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Handy shortcuts inside the interactive Codex session. These save a lot of typing once they're muscle memory.</p>
+  <table class="ref-table">
+    <thead>
+      <tr>
+        <th>Shortcut</th>
+        <th>What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>@</code></td><td>Open the universal picker (files, dirs, plugins, skills)</td></tr>
+      <tr><td><code>Alt+,</code></td><td>Lower reasoning effort (faster, cheaper)</td></tr>
+      <tr><td><code>Alt+.</code></td><td>Raise reasoning effort (slower, deeper)</td></tr>
+      <tr><td><code>Esc</code></td><td>Interrupt Codex mid-task without killing the session</td></tr>
+      <tr><td><code>Ctrl+C</code></td><td>Cancel the current operation</td></tr>
+      <tr><td><code>Ctrl+D</code></td><td>Exit the session</td></tr>
+      <tr><td><code>↑ / ↓</code></td><td>Scroll back through your previous prompts</td></tr>
+    </tbody>
+  </table>
 </section>
 
 <!-- MODELS REFERENCE -->
@@ -1092,6 +1248,85 @@ codex --profile daily</code></pre>
       </tr>
     </tbody>
   </table>
+
+  <div class="spacer"></div>
+
+  <h3>Canonical config.toml Starter</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Drop this into <code>~/.codex/config.toml</code> for sensible Replit defaults. It sets GPT-5.5, the workspace-write sandbox, on-request approvals, and cached web search. Everything else in this guide builds on these.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">~/.codex/config.toml</span><button class="copy-btn" onclick="copyCode(this,`# Default model and behaviour\nmodel = \"gpt-5.5\"\napproval_policy = \"on-request\"\nsandbox_mode = \"workspace-write\"\nweb_search = \"cached\"\n\n# Raise the AGENTS.md size limit if your project is large\nproject_doc_max_bytes = 65536\n\n# Daily-driver profile (load with: codex --profile daily)\n[profiles.daily]\nmodel = \"gpt-5.5\"\napproval_policy = \"on-request\"\nsandbox_mode = \"workspace-write\"\n\n# Safe profile for sensitive or unfamiliar code\n[profiles.safe]\napproval_policy = \"untrusted\"\nsandbox_mode = \"read-only\"`)">Copy</button></div>
+    <pre><code># Default model and behaviour
+model = "gpt-5.5"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "cached"
+
+# Raise the AGENTS.md size limit if your project is large
+project_doc_max_bytes = 65536
+
+# Daily-driver profile (load with: codex --profile daily)
+[profiles.daily]
+model = "gpt-5.5"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+# Safe profile for sensitive or unfamiliar code
+[profiles.safe]
+approval_policy = "untrusted"
+sandbox_mode = "read-only"</code></pre>
+  </div>
+</section>
+
+<!-- COST & LIMITS -->
+<section id="cost">
+  <div class="section-header">
+    <span class="section-icon">💳</span>
+    <h2>Cost &amp; Limits</h2>
+  </div>
+
+  <p class="lead">When you authenticate with ChatGPT OAuth (the recommended path for Replit), Codex usage draws against your ChatGPT plan rather than billing per token. There's no separate Codex invoice.</p>
+
+  <table class="ref-table">
+    <thead>
+      <tr>
+        <th>Plan</th>
+        <th>Rough Codex capacity</th>
+        <th>Best for</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ChatGPT Plus ($20/mo)</td>
+        <td>Light-to-moderate daily use, occasional throttling on heavy days</td>
+        <td>Solo devs, side projects</td>
+      </tr>
+      <tr>
+        <td>ChatGPT Pro ($200/mo)</td>
+        <td>Heavy all-day use, much higher limits, priority access</td>
+        <td>Full-time agentic coding</td>
+      </tr>
+      <tr>
+        <td>ChatGPT Team / Business</td>
+        <td>Per-seat limits, pooled across the team</td>
+        <td>Teams sharing Codex</td>
+      </tr>
+      <tr>
+        <td>API key (OPENAI_API_KEY)</td>
+        <td>Pay-per-token, no cap but costs add up fast on long agentic runs</td>
+        <td>CI pipelines, automation</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="banner banner-amber" style="margin-top:14px">
+    <span class="banner-icon">💡</span>
+    <div>If you hit a usage limit mid-session, Codex tells you and usually suggests a cooldown window. Dropping to <code>gpt-5.4-mini</code> with <code>/model</code> for routine edits stretches your quota further, then switch back to <code>gpt-5.5</code> for the hard problems. The blended token usage display (v0.131+) in the TUI status line shows roughly where you stand.</div>
+  </div>
+
+  <div class="banner banner-blue" style="margin-top:10px">
+    <span class="banner-icon">ℹ️</span>
+    <div>Limits and pricing shift often. These figures reflect May 2026, check <a href="https://openai.com/chatgpt/pricing" target="_blank">openai.com/chatgpt/pricing</a> for the current numbers before committing to a plan.</div>
+  </div>
 </section>
 
 <!-- QUICK START REFERENCE -->
@@ -1421,6 +1656,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v1.2</td><td>May 29, 2026</td><td>Added First-Time Setup walkthrough, Safety &amp; .gitignore section, MCP server setup, canonical config.toml starter, Cost &amp; Limits table, TUI keyboard shortcuts, and a "which Codex" orientation note. Added favicon.</td></tr>
           <tr><td>v1.1</td><td>May 29, 2026</td><td>Updated for Codex CLI v0.134.0. Added conversation history search, <code>codex doctor</code> diagnostic command, universal <code>@</code> picker, Goal Mode GA, GPT-5.5 Instant as default. Reorganised troubleshooting around <code>codex doctor</code>.</td></tr>
           <tr><td>v1.0</td><td>May 2026</td><td>Initial release. Covers Codex CLI v0.130, GPT-5.5, AGENTS.md, approval modes, device-code auth for Replit.</td></tr>
         </tbody>
