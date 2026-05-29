@@ -312,37 +312,43 @@ pre code{white-space:pre}
 </head>
 <body>
 
-<!-- CROSS-GUIDE BANNER -->
-<a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 20px;background:linear-gradient(90deg,rgba(245,166,35,0.08),rgba(245,166,35,0.04),rgba(245,166,35,0.08));border-bottom:1px solid rgba(245,166,35,0.25);color:var(--text-dim);text-decoration:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;text-align:center;transition:all 0.15s;" onmouseover="this.style.background='linear-gradient(90deg,rgba(245,166,35,0.14),rgba(245,166,35,0.08),rgba(245,166,35,0.14))';this.style.color='#e6edf3';this.querySelector('.cross-arrow').style.transform='translateX(3px)';" onmouseout="this.style.background='linear-gradient(90deg,rgba(245,166,35,0.08),rgba(245,166,35,0.04),rgba(245,166,35,0.08))';this.style.color='var(--text-dim)';this.querySelector('.cross-arrow').style.transform='';">
-  <span>Also available: <strong style="color:#f5a623;">Replit + Claude Code Safe Prompt Guide</strong></span>
-  <span class="cross-arrow" style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#f5a623;transition:transform 0.2s;">→</span>
-</a>
-
 <!-- WHAT'S NEW -->
 <div id="whats-new-wrapper">
   <button id="whats-new-toggle" onclick="toggleWN()" aria-expanded="true">
     <span class="pulse-dot"></span>
     <span class="wn-label">What's New</span>
-    <span class="wn-text">Codex CLI v0.130 (May 2026) landed. GPT-5.5 is default. Remote control headless mode added.</span>
+    <span class="wn-text">Codex CLI v0.134.0 (May 26, 2026): conversation history search, --profile canonical, MCP OAuth, codex doctor.</span>
     <span class="wn-chevron" id="wn-chevron">▶</span>
   </button>
   <div id="whats-new-body" class="closed">
     <div class="wn-grid">
       <div class="wn-card event">
-        <h4>🚀 Codex CLI Replit Guide v1.0</h4>
-        <p>First release of the Codex CLI in Replit guide. Covers AGENTS.md, approval modes, ChatGPT OAuth, session resumption, and the full daily workflow for Replit shell users.</p>
+        <h4>🚀 Guide v1.1 — May 2026 Codex Wave</h4>
+        <p>Updated for Codex CLI v0.134.0 with conversation history search, the new <code>codex doctor</code> diagnostic, Goal Mode going GA, the universal <code>@</code> picker, and GPT-5.5 Instant becoming the default ChatGPT model.</p>
       </div>
       <div class="wn-card">
-        <h4>⚡ GPT-5.5 Now Default</h4>
-        <p>GPT-5.5 (400K context in Codex, launched April 23 2026) is now the recommended default model. Available on ChatGPT sign-in only.</p>
+        <h4>🔍 Conversation History Search</h4>
+        <p>v0.134 adds case-insensitive search across your local conversation history with content previews. Find that prompt you used three weeks ago without scrolling through resume lists.</p>
       </div>
       <div class="wn-card">
-        <h4>📋 AGENTS.md Scaffold</h4>
-        <p>Use <code>/init</code> inside a Codex session to auto-generate an AGENTS.md scaffold from your project. No more blank-page syndrome.</p>
+        <h4>🩺 codex doctor</h4>
+        <p>New diagnostic command checks your Codex installation, auth status, sandbox config, and MCP servers. First port of call for any troubleshooting.</p>
       </div>
       <div class="wn-card">
-        <h4>🔄 Session Resume</h4>
-        <p><code>codex resume --last</code> picks up your most recent session instantly. No more starting from scratch after a Replit reload.</p>
+        <h4>🎯 Goal Mode is GA</h4>
+        <p>Goal Mode is now generally available across CLI, IDE extension, and the Codex app. Define an outcome with success criteria and let Codex keep working toward it autonomously.</p>
+      </div>
+      <div class="wn-card">
+        <h4>@ Universal Picker</h4>
+        <p>v0.131 added a single <code>@</code> picker that searches files, directories, plugins, and skills together. Backed by app-server plugin metadata, much faster than tab-completing through folders.</p>
+      </div>
+      <div class="wn-card">
+        <h4>⚙️ --profile Now Canonical</h4>
+        <p>v0.134 makes <code>--profile</code> the primary profile selector across CLI, TUI permissions, and sandbox flows. Legacy profile configs are rejected with migration guidance.</p>
+      </div>
+      <div class="wn-card">
+        <h4>⚡ GPT-5.5 Instant Default</h4>
+        <p>Since May 5, GPT-5.5 Instant is the default model for all ChatGPT users. 52.5% fewer hallucinations than standard 5.5 on high-stakes prompts.</p>
       </div>
       <div class="wn-card">
         <h4>🔒 SSH Auth for Replit</h4>
@@ -366,7 +372,7 @@ pre code{white-space:pre}
       The practical field guide for using OpenAI Codex CLI inside Replit Shell. ChatGPT subscription auth, AGENTS.md, approval modes, and daily workflow prompts.
     </p>
     <div class="tag-list" style="justify-content:center">
-      <span class="tag">Codex CLI v0.130</span>
+      <span class="tag">Codex CLI v0.134</span>
       <span class="tag">May 2026</span>
       <span class="tag">GPT-5.5</span>
       <span class="tag">ChatGPT OAuth</span>
@@ -648,6 +654,15 @@ Do not start writing code yet. Wait for me to tell you what to work on today."</
 
   <div class="spacer"></div>
 
+  <h3>Search Conversation History</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">New in v0.134: case-insensitive search across your full local conversation history with content previews. Find the prompt you used three weeks ago without scrolling through resume lists.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex search \"your search term\"')">Copy</button></div>
+    <pre><code>codex search "your search term"</code></pre>
+  </div>
+
+  <div class="spacer"></div>
+
   <h3>Mid-Session Compact (Context Management)</h3>
   <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">GPT-5.5 gives you a 400K context window in Codex, which is generous but not unlimited. If a session gets long, use <code>/compact</code> inside the session to compress history and free up context budget.</p>
   <div class="code-block">
@@ -825,9 +840,16 @@ codex --profile daily</code></pre>
     <div class="skill-card">
       <div class="skill-title">
         <span class="skill-name">/goal</span>
-        <span class="skill-badge badge-config">Persistent</span>
+        <span class="skill-badge badge-config">GA</span>
       </div>
-      <p class="skill-desc">Sets a persisted work goal for the session. Codex keeps this goal in mind across the conversation, which helps it avoid going off-track on long multi-step tasks.</p>
+      <p class="skill-desc">Define an outcome and success criteria, then let Codex keep working toward it. Now generally available across CLI, IDE extension, and the Codex app. Great for multi-step tasks where you'd otherwise have to nudge it back on course.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">@ picker</span>
+        <span class="skill-badge badge-interactive">v0.131+</span>
+      </div>
+      <p class="skill-desc">Type <code>@</code> in the TUI to open a unified picker that searches files, directories, plugins, and skills together. Backed by app-server plugin metadata, so it's much faster than tab-completing through deep folder trees.</p>
     </div>
     <div class="skill-card">
       <div class="skill-title">
@@ -845,6 +867,17 @@ codex --profile daily</code></pre>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex exec \"run tests and fix any failures\"')">Copy</button></div>
         <pre><code>codex exec "run tests and fix any failures"</code></pre>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">codex doctor</span>
+        <span class="skill-badge badge-runtime">v0.131+</span>
+      </div>
+      <p class="skill-desc">Run from the shell to diagnose your installation: auth status, sandbox config, MCP servers, network access, version checks. First port of call for any troubleshooting.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex doctor')">Copy</button></div>
+        <pre><code>codex doctor</code></pre>
       </div>
     </div>
   </div>
@@ -940,6 +973,14 @@ codex --profile daily</code></pre>
       <tr>
         <td>Pick a past session from history</td>
         <td><code>codex resume</code></td>
+      </tr>
+      <tr>
+        <td>Search conversation history (v0.134+)</td>
+        <td><code>codex search "term"</code></td>
+      </tr>
+      <tr>
+        <td>Diagnose your installation</td>
+        <td><code>codex doctor</code></td>
       </tr>
       <tr>
         <td>Scaffold AGENTS.md for current project</td>
@@ -1050,6 +1091,13 @@ codex --profile daily</code></pre>
     <h2>Troubleshooting</h2>
   </div>
 
+  <div class="banner banner-green">
+    <span class="banner-icon">🩺</span>
+    <div>First port of call for any issue: run <code>codex doctor</code> in your Replit shell. It checks your installation, auth status, sandbox config, MCP servers, and network access in one pass. Often tells you exactly what's broken before you have to guess.</div>
+  </div>
+
+  <div class="spacer"></div>
+
   <button class="collapse-trigger" onclick="toggleCollapse('ts-auth')">
     <div class="ct-left">
       <span>🔑</span> Auth loops / "not logged in" errors
@@ -1059,7 +1107,7 @@ codex --profile daily</code></pre>
   </button>
   <div class="collapse-body closed" id="ts-auth">
     <div class="collapse-inner">
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">If Codex keeps asking you to log in, the auth token is probably corrupted or expired. Clear it and re-auth:</p>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">If Codex keeps asking you to log in, the auth token is probably corrupted or expired. Run <code>codex doctor</code> first to confirm, then clear and re-auth:</p>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex auth logout\ncodex auth login --device')">Copy</button></div>
         <pre><code>codex auth logout
@@ -1214,6 +1262,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v1.1</td><td>May 29, 2026</td><td>Updated for Codex CLI v0.134.0. Added conversation history search, <code>codex doctor</code> diagnostic command, universal <code>@</code> picker, Goal Mode GA, GPT-5.5 Instant as default. Reorganised troubleshooting around <code>codex doctor</code>.</td></tr>
           <tr><td>v1.0</td><td>May 2026</td><td>Initial release. Covers Codex CLI v0.130, GPT-5.5, AGENTS.md, approval modes, device-code auth for Replit.</td></tr>
         </tbody>
       </table>
