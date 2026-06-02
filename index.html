@@ -1012,6 +1012,19 @@ Do not start writing code yet. Wait for me to tell you what to work on today."</
 
   <div class="spacer"></div>
 
+  <h3>Archive Old Sessions</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">As sessions pile up, your resume list gets noisy. Archiving tucks a session away so it stays out of <code>codex resume</code> until you restore it. Archived sessions are protected from accidental resume or fork. Use <code>/archive</code> inside the TUI, or the shell commands below.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'# Archive a session (keeps it but hides it from resume)\ncodex archive\n\n# Bring one back\ncodex unarchive')">Copy</button></div>
+    <pre><code># Archive a session (keeps it but hides it from resume)
+codex archive
+
+# Bring one back
+codex unarchive</code></pre>
+  </div>
+
+  <div class="spacer"></div>
+
   <h3>Mid-Session Compact (Context Management)</h3>
   <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">GPT-5.5 gives you a 400K context window in Codex, which is generous but not unlimited. If a session gets long, use <code>/compact</code> inside the session to compress history and free up context budget.</p>
   <div class="code-block">
@@ -1429,6 +1442,10 @@ sandbox_mode = "read-only"</code></pre>
         <td><code>codex search "term"</code></td>
       </tr>
       <tr>
+        <td>Archive / restore a session</td>
+        <td><code>codex archive</code> / <code>codex unarchive</code> (or <code>/archive</code>)</td>
+      </tr>
+      <tr>
         <td>Diagnose your installation</td>
         <td><code>codex doctor</code></td>
       </tr>
@@ -1712,6 +1729,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v1.3</td><td>May 30, 2026</td><td>Added session archiving (<code>codex archive</code> / <code>/archive</code>) to the resume section and quick reference.</td></tr>
           <tr><td>v1.2</td><td>May 29, 2026</td><td>Added First-Time Setup walkthrough, Safety &amp; .gitignore section, MCP server setup, canonical config.toml starter, Cost &amp; Limits table, TUI keyboard shortcuts, and a "which Codex" orientation note. Added favicon.</td></tr>
           <tr><td>v1.1</td><td>May 29, 2026</td><td>Updated for Codex CLI v0.134.0. Added conversation history search, <code>codex doctor</code> diagnostic command, universal <code>@</code> picker, Goal Mode GA, GPT-5.5 Instant as default. Reorganised troubleshooting around <code>codex doctor</code>.</td></tr>
           <tr><td>v1.0</td><td>May 2026</td><td>Initial release. Covers Codex CLI v0.130, GPT-5.5, AGENTS.md, approval modes, device-code auth for Replit.</td></tr>
