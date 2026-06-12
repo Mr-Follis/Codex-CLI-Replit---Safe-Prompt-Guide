@@ -420,7 +420,7 @@ pre code{white-space:pre}
       <!-- Row 2: colour-coded -->
       <a href="#first-time-setup" class="nav-btn blue-tint"><span class="nav-icon">🆕</span>First-Time</a>
       <a href="#agents-md" class="nav-btn green-tint"><span class="nav-icon">📄</span>AGENTS.md</a>
-      <a href="#modes" class="nav-btn purple-tint"><span class="nav-icon">🔒</span>Approval Modes</a>
+      <a href="#skills" class="nav-btn purple-tint"><span class="nav-icon">🧩</span>Skills</a>
       <a href="#troubleshoot" class="nav-btn red-tint"><span class="nav-icon">🔧</span>Troubleshoot</a>
     </div>
   </div>
@@ -1283,6 +1283,101 @@ codex --profile daily</code></pre>
   </table>
 </section>
 
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-icon">🧩</span>
+    <h2>Skills</h2>
+    <span style="background:var(--green-dim);border:1px solid rgba(74,222,128,0.25);color:var(--green);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px">Reusable workflows</span>
+  </div>
+
+  <p class="lead">A skill is a folder with a <code>SKILL.md</code> file (name and description in the frontmatter) plus optional scripts. Drop it in <code>~/.codex/skills/</code>, restart Codex, and it loads automatically. Codex matches your prompt against installed skill descriptions and pulls the right one in. Write the instructions once, every future session inherits the behaviour.</p>
+
+  <div class="banner banner-blue">
+    <span class="banner-icon">ℹ️</span>
+    <div>Skills use the open <code>SKILL.md</code> standard, so the same skill works across Codex, Claude Code, OpenClaw, and Cursor. The only difference is the folder each agent reads from. That cross-compatibility is the whole point of the standard.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Where skills live</h3>
+  <table class="ref-table">
+    <thead>
+      <tr><th>Scope</th><th>Path</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Global (all projects)</td><td><code>~/.codex/skills/</code></td></tr>
+      <tr><td>Project-only (in the repo)</td><td><code>.codex/skills/</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="banner banner-amber" style="margin-top:12px">
+    <span class="banner-icon">💡</span>
+    <div>Codex won't re-scan the skills folder mid-session. After adding or editing a skill, restart Codex (or start a new session) for it to load.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>One skills folder across all your agents</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Since the format is identical, you can symlink a single skills folder so Codex, Claude Code, and OpenClaw all share one set. Maintain skills in one place, every agent inherits them.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'# Point Codex and OpenClaw at your Claude skills folder\nln -s ~/.claude/skills/ ~/.codex/skills\nln -s ~/.claude/skills/ ~/.openclaw/skills')">Copy</button></div>
+    <pre><code># Point Codex and OpenClaw at your Claude skills folder
+ln -s ~/.claude/skills/ ~/.codex/skills
+ln -s ~/.claude/skills/ ~/.openclaw/skills</code></pre>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Where to find skills</h3>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">openai/skills</span>
+        <span class="skill-badge badge-runtime">Official</span>
+      </div>
+      <p class="skill-desc">OpenAI's own curated catalogue on GitHub. The canonical, most-trusted source, with curated and experimental skills maintained by OpenAI. Start here.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">github</span><button class="copy-btn" onclick="copyCode(this,'https://github.com/openai/skills')">Copy</button></div>
+        <pre><code>github.com/openai/skills</code></pre>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">codex plugin</span>
+        <span class="skill-badge badge-shortcut">Built-in</span>
+      </div>
+      <p class="skill-desc">The Codex CLI has a built-in plugin marketplace. Browse and install from the shell, then list what's wired up with the JSON flag.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex plugin list\ncodex plugin list --json')">Copy</button></div>
+        <pre><code>codex plugin list
+codex plugin list --json</code></pre>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">Community directories</span>
+        <span class="skill-badge badge-interactive">Third-party</span>
+      </div>
+      <p class="skill-desc">Searchable directories that index public skill repos: SkillsLLM (1,600+ skills), SkillsMP, MCP Market, and the awesome-list at <code>ComposioHQ/awesome-codex-skills</code>. These rank loosely by GitHub stars rather than verified installs.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">skill-creator</span>
+        <span class="skill-badge badge-config">DIY</span>
+      </div>
+      <p class="skill-desc">Make your own: create <code>~/.codex/skills/your-skill/</code>, add a SKILL.md with name + description frontmatter, drop in instructions and any helper scripts. The skill-creator skill walks you through writing a discoverable description, which is the tricky part.</p>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="banner banner-red">
+    <span class="banner-icon">⚠️</span>
+    <div><strong>Read before you install.</strong> Skills have full access to your shell and can edit your <code>AGENTS.md</code>. Some community installers are, in the author's own words, effectively remote-code-execution toolkits. Stick to <code>openai/skills</code> and other well-known repos for anything sensitive, and always read the <code>SKILL.md</code> plus any helper scripts before adding a community skill. Directories like SkillsMP explicitly state they don't certify safety, treat every skill like open-source code you're about to run.</div>
+  </div>
+</section>
+
 <!-- MODELS REFERENCE -->
 <section id="models">
   <div class="section-header">
@@ -1745,6 +1840,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v1.5</td><td>June 2026</td><td>Added a full Skills section: the <code>SKILL.md</code> format, <code>~/.codex/skills/</code> paths, the cross-agent symlink trick, where to find skills (official <code>openai/skills</code>, built-in plugin marketplace, community directories), and the safety caveat. Added Skills to the nav.</td></tr>
           <tr><td>v1.4</td><td>June 2026</td><td>Bumped to Codex CLI v0.137.0. Added <code>codex plugin list --json</code>, an Amazon Bedrock auth note, and refreshed version references.</td></tr>
           <tr><td>v1.3</td><td>June 2026</td><td>Added session archiving (<code>codex archive</code> / <code>/archive</code>) to the resume section and quick reference.</td></tr>
           <tr><td>v1.2</td><td>May 29, 2026</td><td>Added First-Time Setup walkthrough, Safety &amp; .gitignore section, MCP server setup, canonical config.toml starter, Cost &amp; Limits table, TUI keyboard shortcuts, and a "which Codex" orientation note. Added favicon.</td></tr>
@@ -1763,7 +1859,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.4 &nbsp;&middot;&nbsp; Codex CLI v0.137</p>
+    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.5 &nbsp;&middot;&nbsp; Codex CLI v0.137</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
