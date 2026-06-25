@@ -340,14 +340,14 @@ pre code{white-space:pre}
   <button id="whats-new-toggle" onclick="toggleWN()" aria-expanded="true">
     <span class="pulse-dot"></span>
     <span class="wn-label">What's New</span>
-    <span class="wn-text">Codex CLI v0.137.0 (June 4, 2026): plugin list --json, TUI keybinding upgrades, Amazon Bedrock provider, session archiving.</span>
+    <span class="wn-text">Codex CLI v0.140 (June 2026): faster resume on large histories, stronger web search in Code mode, richer MCP schema support, command-safety hardening.</span>
     <span class="wn-chevron" id="wn-chevron">▶</span>
   </button>
   <div id="whats-new-body" class="closed">
     <div class="wn-grid">
       <div class="wn-card event">
-        <h4>🚀 Guide v1.1 — May 2026 Codex Wave</h4>
-        <p>Updated for Codex CLI v0.137.0 with conversation history search, the new <code>codex doctor</code> diagnostic, Goal Mode going GA, the universal <code>@</code> picker, and GPT-5.5 Instant becoming the default ChatGPT model.</p>
+        <h4>🚀 Guide v1.6 — June 2026 Update</h4>
+        <p>Current as of Codex CLI v0.140. This release brings faster <code>resume --last</code> on large session histories, stronger web search in Code mode, richer MCP schema support, a more informative plugin marketplace, and command-safety hardening. Earlier waves added Skills, the Bedrock provider, session archiving, and the universal <code>@</code> picker.</p>
       </div>
       <div class="wn-card">
         <h4>🔍 Conversation History Search</h4>
@@ -395,7 +395,7 @@ pre code{white-space:pre}
       The practical field guide for using OpenAI Codex CLI inside Replit Shell. ChatGPT subscription auth, AGENTS.md, approval modes, and daily workflow prompts.
     </p>
     <div class="tag-list" style="justify-content:center">
-      <span class="tag">Codex CLI v0.137</span>
+      <span class="tag">Codex CLI v0.140</span>
       <span class="tag">Updated June 2026</span>
       <span class="tag">GPT-5.5</span>
       <span class="tag">ChatGPT OAuth</span>
@@ -794,6 +794,11 @@ Thumbs.db
 
   <h3>If you already committed a secret</h3>
   <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Rotate the key immediately at the provider (regenerate it so the old one stops working). Removing it from git history is secondary, the rotation is what actually protects you. Then add the file to <code>.gitignore</code> and commit that.</p>
+
+  <div class="banner banner-green" style="margin-top:14px">
+    <span class="banner-icon">🔒</span>
+    <div><strong>Codex hardens itself too.</strong> Recent releases tightened command safety: <code>/diff</code> no longer runs repository-provided Git helpers or hooks, PowerShell parser execution is blocked on non-Windows hosts, and browser-origin exec-server handshakes are rejected. These close paths where a malicious repo could trick the agent into running code. Keep Codex updated (<code>npm i -g @openai/codex</code>) to stay current on these.</div>
+  </div>
 </section>
 
 <!-- MCP SETUP -->
@@ -1005,7 +1010,7 @@ Do not start writing code yet. Wait for me to tell you what to work on today."</
         <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'codex resume --last')">Copy</button></div>
         <pre><code>codex resume --last</code></pre>
       </div>
-      <p style="font-size:12.5px;color:var(--text-muted);margin-top:10px">Picks up your most recent session. Codex reloads the conversation history and continues where you left off. Best option after a Replit reload or shell disconnect.</p>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-top:10px">Picks up your most recent session. Codex reloads the conversation history and continues where you left off. Best option after a Replit reload or shell disconnect. As of v0.138 it resolves the newest matching session through the state database first, so restore is noticeably faster on large local histories.</p>
     </div>
     <div class="card">
       <h3>Pick From History</h3>
@@ -1840,11 +1845,12 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v1.6</td><td>June 2026</td><td>Bumped to Codex CLI v0.140. Noted faster <code>resume --last</code> on large histories, added a command-safety hardening callout to the Safety section, refreshed the What's New banner.</td></tr>
           <tr><td>v1.5</td><td>June 2026</td><td>Added a full Skills section: the <code>SKILL.md</code> format, <code>~/.codex/skills/</code> paths, the cross-agent symlink trick, where to find skills (official <code>openai/skills</code>, built-in plugin marketplace, community directories), and the safety caveat. Added Skills to the nav.</td></tr>
           <tr><td>v1.4</td><td>June 2026</td><td>Bumped to Codex CLI v0.137.0. Added <code>codex plugin list --json</code>, an Amazon Bedrock auth note, and refreshed version references.</td></tr>
           <tr><td>v1.3</td><td>June 2026</td><td>Added session archiving (<code>codex archive</code> / <code>/archive</code>) to the resume section and quick reference.</td></tr>
           <tr><td>v1.2</td><td>May 29, 2026</td><td>Added First-Time Setup walkthrough, Safety &amp; .gitignore section, MCP server setup, canonical config.toml starter, Cost &amp; Limits table, TUI keyboard shortcuts, and a "which Codex" orientation note. Added favicon.</td></tr>
-          <tr><td>v1.1</td><td>May 29, 2026</td><td>Updated for Codex CLI v0.137.0. Added conversation history search, <code>codex doctor</code> diagnostic command, universal <code>@</code> picker, Goal Mode GA, GPT-5.5 Instant as default. Reorganised troubleshooting around <code>codex doctor</code>.</td></tr>
+          <tr><td>v1.1</td><td>May 29, 2026</td><td>Updated for Codex CLI v0.134.0. Added conversation history search, <code>codex doctor</code> diagnostic command, universal <code>@</code> picker, Goal Mode GA, GPT-5.5 Instant as default. Reorganised troubleshooting around <code>codex doctor</code>.</td></tr>
           <tr><td>v1.0</td><td>May 2026</td><td>Initial release. Covers Codex CLI v0.130, GPT-5.5, AGENTS.md, approval modes, device-code auth for Replit.</td></tr>
         </tbody>
       </table>
@@ -1859,7 +1865,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.5 &nbsp;&middot;&nbsp; Codex CLI v0.137</p>
+    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.6 &nbsp;&middot;&nbsp; Codex CLI v0.140</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
