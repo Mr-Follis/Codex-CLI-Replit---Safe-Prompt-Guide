@@ -340,14 +340,14 @@ pre code{white-space:pre}
   <button id="whats-new-toggle" onclick="toggleWN()" aria-expanded="true">
     <span class="pulse-dot"></span>
     <span class="wn-label">What's New</span>
-    <span class="wn-text">Codex CLI v0.140 (June 2026): faster resume on large histories, stronger web search in Code mode, richer MCP schema support, command-safety hardening.</span>
+    <span class="wn-text">Codex CLI v0.142 (June 2026): plugin system overhaul, MCP tool search by default, /usage credits, rollout token budgets, permanent session deletion.</span>
     <span class="wn-chevron" id="wn-chevron">▶</span>
   </button>
   <div id="whats-new-body" class="closed">
     <div class="wn-grid">
       <div class="wn-card event">
-        <h4>🚀 Guide v1.6 — June 2026 Update</h4>
-        <p>Current as of Codex CLI v0.140. This release brings faster <code>resume --last</code> on large session histories, stronger web search in Code mode, richer MCP schema support, a more informative plugin marketplace, and command-safety hardening. Earlier waves added Skills, the Bedrock provider, session archiving, and the universal <code>@</code> picker.</p>
+        <h4>🚀 Guide v1.7 — June 2026 Update</h4>
+        <p>Current as of Codex CLI v0.142. This wave brings a plugin system overhaul (curated/workspace/shared sections), MCP tool search on by default, in-CLI <code>/usage</code> credit redemption, configurable rollout token budgets, and permanent session deletion. Earlier waves added Skills, the Bedrock provider, session archiving, and the universal <code>@</code> picker.</p>
       </div>
       <div class="wn-card">
         <h4>🔍 Conversation History Search</h4>
@@ -395,7 +395,7 @@ pre code{white-space:pre}
       The practical field guide for using OpenAI Codex CLI inside Replit Shell. ChatGPT subscription auth, AGENTS.md, approval modes, and daily workflow prompts.
     </p>
     <div class="tag-list" style="justify-content:center">
-      <span class="tag">Codex CLI v0.140</span>
+      <span class="tag">Codex CLI v0.142</span>
       <span class="tag">Updated June 2026</span>
       <span class="tag">GPT-5.5</span>
       <span class="tag">ChatGPT OAuth</span>
@@ -851,6 +851,11 @@ env = { DATABASE_URL = "${DATABASE_URL}" }</code></pre>
     <div>In Replit, stdio servers that need network access (like <code>npx</code> fetching a package) can be blocked by Codex's sandbox. If a server fails to start, try launching Codex with <code>--sandbox danger-full-access</code> for that session, the Replit container is itself the outer sandbox so it stays reasonably safe.</div>
   </div>
 
+  <div class="banner banner-blue" style="margin-top:10px">
+    <span class="banner-icon">ℹ️</span>
+    <div>As of v0.142, Codex uses <strong>tool search by default</strong> for MCP tools where the model supports it. Instead of loading every tool's full schema upfront, Codex discovers them on demand, which keeps your context budget lean when you have several MCP servers wired up. Older models and providers fall back to the previous behaviour automatically.</div>
+  </div>
+
   <div class="spacer"></div>
 
   <h3>List Installed Plugins</h3>
@@ -1042,6 +1047,11 @@ codex archive
 
 # Bring one back
 codex unarchive</code></pre>
+  </div>
+
+  <div class="banner banner-amber" style="margin-top:12px">
+    <span class="banner-icon">💡</span>
+    <div>Archiving only hides a session. If you want a session gone for good (v0.140+ added permanent deletion), that removes it from your local history entirely and can't be undone, so reach for archive unless you specifically need it erased.</div>
   </div>
 
   <div class="spacer"></div>
@@ -1508,9 +1518,18 @@ sandbox_mode = "read-only"</code></pre>
     <div>If you hit a usage limit mid-session, Codex tells you and usually suggests a cooldown window. Dropping to <code>gpt-5.4-mini</code> with <code>/model</code> for routine edits stretches your quota further, then switch back to <code>gpt-5.5</code> for the hard problems. The blended token usage display (v0.131+) in the TUI status line shows roughly where you stand.</div>
   </div>
 
-  <div class="banner banner-blue" style="margin-top:10px">
+  <div class="spacer"></div>
+
+  <h3>Track and stretch your usage (v0.142)</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Two newer features help you stay inside your limits. <code>/usage</code> shows where you stand and can redeem earned usage-limit reset credits (with a confirmation step). Rollout token budgets let you cap token spend across agent threads, Codex warns as you approach the limit and aborts the turn when it's exhausted, so a runaway agentic loop can't silently burn your whole quota.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">slash command (inside session)</span><button class="copy-btn" onclick="copyCode(this,'/usage')">Copy</button></div>
+    <pre><code>/usage</code></pre>
+  </div>
+
+  <div class="banner banner-blue" style="margin-top:14px">
     <span class="banner-icon">ℹ️</span>
-    <div>Limits and pricing shift often. These figures reflect May 2026, check <a href="https://openai.com/chatgpt/pricing" target="_blank">openai.com/chatgpt/pricing</a> for the current numbers before committing to a plan.</div>
+    <div>Limits and pricing shift often. These figures reflect June 2026, check <a href="https://openai.com/chatgpt/pricing" target="_blank">openai.com/chatgpt/pricing</a> for the current numbers before committing to a plan.</div>
   </div>
 </section>
 
@@ -1845,6 +1864,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v1.7</td><td>June 2026</td><td>Bumped to Codex CLI v0.142. Added MCP tool-search-by-default note, <code>/usage</code> credits and rollout token budgets in Cost &amp; Limits, and a permanent-session-deletion note alongside archiving.</td></tr>
           <tr><td>v1.6</td><td>June 2026</td><td>Bumped to Codex CLI v0.140. Noted faster <code>resume --last</code> on large histories, added a command-safety hardening callout to the Safety section, refreshed the What's New banner.</td></tr>
           <tr><td>v1.5</td><td>June 2026</td><td>Added a full Skills section: the <code>SKILL.md</code> format, <code>~/.codex/skills/</code> paths, the cross-agent symlink trick, where to find skills (official <code>openai/skills</code>, built-in plugin marketplace, community directories), and the safety caveat. Added Skills to the nav.</td></tr>
           <tr><td>v1.4</td><td>June 2026</td><td>Bumped to Codex CLI v0.137.0. Added <code>codex plugin list --json</code>, an Amazon Bedrock auth note, and refreshed version references.</td></tr>
@@ -1865,7 +1885,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.6 &nbsp;&middot;&nbsp; Codex CLI v0.140</p>
+    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.7 &nbsp;&middot;&nbsp; Codex CLI v0.142</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
