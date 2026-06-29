@@ -1387,6 +1387,63 @@ codex plugin list --json</code></pre>
 
   <div class="spacer"></div>
 
+  <h3>Notable skills worth knowing</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:6px">A hand-picked snapshot of well-used skills, not a live ranking. Compiled June 2026, so check each repo for the latest before installing.</p>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">frontend-design</span>
+        <span class="skill-badge badge-config">Design</span>
+      </div>
+      <p class="skill-desc">The go-to design skill. Kills the "AI slop" look by banning overused fonts (Inter, Roboto, Arial, Space Grotesk) and forcing a real palette and typography rationale before any CSS. The most-installed design skill across Codex and Claude Code.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">install</span><button class="copy-btn" onclick="copyCode(this,'npx skills add vercel-labs/agent-skills --skill frontend-design')">Copy</button></div>
+        <pre><code>npx skills add vercel-labs/agent-skills --skill frontend-design</code></pre>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">impeccable</span>
+        <span class="skill-badge badge-config">Design</span>
+      </div>
+      <p class="skill-desc">More sophisticated than the font-blocklist approach. Runs in two modes (brand vs product) since a landing page and a dashboard need opposite things, with 27 anti-pattern rules across type, colour, layout, and motion. Works across Codex, Claude Code, Cursor, and Gemini.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">install</span><button class="copy-btn" onclick="copyCode(this,'npx skills add pbakaus/impeccable')">Copy</button></div>
+        <pre><code>npx skills add pbakaus/impeccable</code></pre>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">accessibility</span>
+        <span class="skill-badge badge-interactive">A11y</span>
+      </div>
+      <p class="skill-desc">Contrast checks against WCAG AA/AAA, semantic HTML and ARIA review, heading hierarchy, and colour-as-only-signal detection. Flags regressions before you ship instead of after a failed audit. Pairs well with either design skill.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">playwright</span>
+        <span class="skill-badge badge-runtime">Visual QA</span>
+      </div>
+      <p class="skill-desc">Lets Codex open your app in a real browser, resize to different breakpoints, and visually compare the build against reference screenshots, then iterate until it matches. The single biggest quality boost for responsive UI work.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">handoff</span>
+        <span class="skill-badge badge-shortcut">Workflow</span>
+      </div>
+      <p class="skill-desc">Captures the decisions and remaining tasks from your current session into a <code>.md</code> file, so you can start a fresh session (or switch models when you hit a limit) without losing your place. Made by Matt Pocock.</p>
+    </div>
+    <div class="skill-card">
+      <div class="skill-title">
+        <span class="skill-name">grill-me</span>
+        <span class="skill-badge badge-shortcut">Planning</span>
+      </div>
+      <p class="skill-desc">Before building a feature, it asks the questions you didn't think of (what if customers don't pay, require a card for the free trial, etc.), then produces a detailed plan. Good for de-risking a new build or structuring an article.</p>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
   <div class="banner banner-red">
     <span class="banner-icon">⚠️</span>
     <div><strong>Read before you install.</strong> Skills have full access to your shell and can edit your <code>AGENTS.md</code>. Some community installers are, in the author's own words, effectively remote-code-execution toolkits. Stick to <code>openai/skills</code> and other well-known repos for anything sensitive, and always read the <code>SKILL.md</code> plus any helper scripts before adding a community skill. Directories like SkillsMP explicitly state they don't certify safety, treat every skill like open-source code you're about to run.</div>
@@ -1864,6 +1921,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v1.8</td><td>June 2026</td><td>Added a curated "Notable skills worth knowing" list to the Skills section: frontend-design, impeccable, accessibility, playwright, handoff, grill-me. Clearly marked as a dated snapshot, not a live ranking.</td></tr>
           <tr><td>v1.7</td><td>June 2026</td><td>Bumped to Codex CLI v0.142. Added MCP tool-search-by-default note, <code>/usage</code> credits and rollout token budgets in Cost &amp; Limits, and a permanent-session-deletion note alongside archiving.</td></tr>
           <tr><td>v1.6</td><td>June 2026</td><td>Bumped to Codex CLI v0.140. Noted faster <code>resume --last</code> on large histories, added a command-safety hardening callout to the Safety section, refreshed the What's New banner.</td></tr>
           <tr><td>v1.5</td><td>June 2026</td><td>Added a full Skills section: the <code>SKILL.md</code> format, <code>~/.codex/skills/</code> paths, the cross-agent symlink trick, where to find skills (official <code>openai/skills</code>, built-in plugin marketplace, community directories), and the safety caveat. Added Skills to the nav.</td></tr>
@@ -1885,7 +1943,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.7 &nbsp;&middot;&nbsp; Codex CLI v0.142</p>
+    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.8 &nbsp;&middot;&nbsp; Codex CLI v0.142</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
