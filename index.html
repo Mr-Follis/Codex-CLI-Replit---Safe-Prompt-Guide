@@ -1952,27 +1952,48 @@ codex auth login --device</code></pre>
 <div id="sidebar">
   <div class="sb-item">
     <a href="#install" class="sb-jump">⚙️</a>
-    <button class="sb-copy" onclick="sbCopy(this,'npm i -g @openai/codex')">📋</button>
+    <button class="sb-copy" onclick="sbCopyId(this,'tpl-install')">📋</button>
     <div class="sb-tooltip">Install Codex CLI</div>
   </div>
   <div class="sb-item">
     <a href="#kickoff" class="sb-jump">☀️</a>
-    <button class="sb-copy" id="sb-kickoff" onclick="sbCopy(this,'codex \"Read AGENTS.md and CONTEXT.md first. Then confirm:\\n1. The current project context you have loaded\\n2. What was last worked on\\n3. Any open issues or blockers you can see\\n\\nDo not start writing code yet. Wait for me to tell you what to work on today.\"')">📋</button>
+    <button class="sb-copy" onclick="sbCopyId(this,'tpl-kickoff')">📋</button>
     <div class="sb-tooltip">Kick-Off Prompt</div>
   </div>
   <div class="sb-item">
     <a href="#checkpoint" class="sb-jump">⚡</a>
-    <button class="sb-copy" onclick="sbCopy(this,'Pause. Update CONTEXT.md with:\\n1. What we completed this session\\n2. What is still in progress\\n3. Any blockers or decisions made\\n4. What to pick up next session')">📋</button>
+    <button class="sb-copy" onclick="sbCopyId(this,'tpl-checkpoint')">📋</button>
     <div class="sb-tooltip">Checkpoint Prompt</div>
   </div>
   <div class="sb-item">
     <a href="#wrapup" class="sb-jump">🌙</a>
-    <button class="sb-copy" onclick="sbCopy(this,'End of day wrap-up. Please:\\n1. Update CONTEXT.md with today\\'s progress, decisions, and blockers\\n2. Update ROADMAP.md if any priorities changed\\n3. List the top 3 things to pick up tomorrow\\n4. Flag any files that were changed today so I can review before committing\\n\\nDo not start any new work. Just wrap up and summarise.')">📋</button>
+    <button class="sb-copy" onclick="sbCopyId(this,'tpl-wrapup')">📋</button>
     <div class="sb-tooltip">End-of-Day Wrap</div>
   </div>
   <div class="sb-divider"></div>
   <button class="sb-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
 </div>
+
+<!-- Hidden prompt templates for the sidebar (raw text, no escaping needed) -->
+<script type="text/template" id="tpl-install">npm i -g @openai/codex</script>
+<script type="text/template" id="tpl-kickoff">codex "Read AGENTS.md and CONTEXT.md first. Then confirm:
+1. The current project context you have loaded
+2. What was last worked on
+3. Any open issues or blockers you can see
+
+Do not start writing code yet. Wait for me to tell you what to work on today."</script>
+<script type="text/template" id="tpl-checkpoint">Pause. Update CONTEXT.md with:
+1. What we completed this session
+2. What is still in progress
+3. Any blockers or decisions made
+4. What to pick up next session</script>
+<script type="text/template" id="tpl-wrapup">End of day wrap-up. Please:
+1. Update CONTEXT.md with today's progress, decisions, and blockers
+2. Update ROADMAP.md if any priorities changed
+3. List the top 3 things to pick up tomorrow
+4. Flag any files that were changed today so I can review before committing
+
+Do not start any new work. Just wrap up and summarise.</script>
 
 <script>
 // What's New toggle
@@ -2040,6 +2061,27 @@ function copyPre(btn) {
   });
   const orig = btn.textContent;
   btn.textContent = '✓ Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.textContent = orig;
+    btn.classList.remove('copied');
+  }, 2000);
+}
+
+// Sidebar copy from a hidden template block by id (mini, just shows ✓)
+function sbCopyId(btn, id) {
+  const el = document.getElementById(id);
+  const text = el ? el.textContent : '';
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  const orig = btn.textContent;
+  btn.textContent = '✓';
   btn.classList.add('copied');
   setTimeout(() => {
     btn.textContent = orig;
