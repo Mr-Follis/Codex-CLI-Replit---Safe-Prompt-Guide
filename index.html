@@ -1392,13 +1392,13 @@ codex plugin list --json</code></pre>
   <div class="skills-grid">
     <div class="skill-card">
       <div class="skill-title">
-        <span class="skill-name">frontend-design</span>
-        <span class="skill-badge badge-config">Design</span>
+        <span class="skill-name">vercel-labs/agent-skills</span>
+        <span class="skill-badge badge-config">Design + more</span>
       </div>
-      <p class="skill-desc">The go-to design skill. Kills the "AI slop" look by banning overused fonts (Inter, Roboto, Arial, Space Grotesk) and forcing a real palette and typography rationale before any CSS. The most-installed design skill across Codex and Claude Code.</p>
+      <p class="skill-desc">Vercel's bundle of 9 skills, including <code>web-design-guidelines</code> (the design one that kills the "AI slop" look), plus React best practices, composition patterns, view transitions, optimisation, and writing guidelines. One command installs all 9, then pick and choose in your sessions.</p>
       <div class="code-block">
-        <div class="code-header"><span class="code-lang">install</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
-        <pre><code>npx skills add vercel-labs/agent-skills --skill frontend-design</code></pre>
+        <div class="code-header"><span class="code-lang">install (all 9)</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
+        <pre><code>npx skills add vercel-labs/agent-skills</code></pre>
       </div>
     </div>
     <div class="skill-card">
@@ -1921,6 +1921,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v1.9</td><td>July 2026</td><td>Fixed the Vercel skills install command. The old <code>--skill frontend-design</code> name doesn't exist in that repo; corrected to a single <code>npx skills add vercel-labs/agent-skills</code> that installs all 9 (the design one is <code>web-design-guidelines</code>).</td></tr>
           <tr><td>v1.8</td><td>June 2026</td><td>Added a curated "Notable skills worth knowing" list to the Skills section: frontend-design, impeccable, accessibility, playwright, handoff, grill-me. Clearly marked as a dated snapshot, not a live ranking.</td></tr>
           <tr><td>v1.7</td><td>June 2026</td><td>Bumped to Codex CLI v0.142. Added MCP tool-search-by-default note, <code>/usage</code> credits and rollout token budgets in Cost &amp; Limits, and a permanent-session-deletion note alongside archiving.</td></tr>
           <tr><td>v1.6</td><td>June 2026</td><td>Bumped to Codex CLI v0.140. Noted faster <code>resume --last</code> on large histories, added a command-safety hardening callout to the Safety section, refreshed the What's New banner.</td></tr>
@@ -1943,7 +1944,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.8 &nbsp;&middot;&nbsp; Codex CLI v0.142</p>
+    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.9 &nbsp;&middot;&nbsp; Codex CLI v0.142</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
