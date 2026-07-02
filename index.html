@@ -1321,14 +1321,20 @@ codex --profile daily</code></pre>
       <tr><th>Scope</th><th>Path</th></tr>
     </thead>
     <tbody>
+      <tr><td>Canonical shared store (what the <code>skills</code> CLI uses)</td><td><code>.agents/skills/</code></td></tr>
       <tr><td>Global (all projects)</td><td><code>~/.codex/skills/</code></td></tr>
       <tr><td>Project-only (in the repo)</td><td><code>.codex/skills/</code></td></tr>
     </tbody>
   </table>
 
-  <div class="banner banner-amber" style="margin-top:12px">
+  <div class="banner banner-blue" style="margin-top:12px">
+    <span class="banner-icon">ℹ️</span>
+    <div>When you install with <code>npx skills add ...</code>, skills land in <code>.agents/skills/</code> (the shared store every agent reads). In Replit that's <code>/home/runner/workspace/.agents/skills</code>. Codex discovers a project's <code>.agents/skills</code> relative to where you launch it, so <strong>start Codex from your workspace root</strong> (<code>cd /home/runner/workspace</code> first) or it won't pick them up.</div>
+  </div>
+
+  <div class="banner banner-amber" style="margin-top:10px">
     <span class="banner-icon">💡</span>
-    <div>Codex won't re-scan the skills folder mid-session. After adding or editing a skill, restart Codex (or start a new session) for it to load.</div>
+    <div>Codex won't re-scan the skills folder mid-session. After adding or editing a skill you have to reload: <code>npm i -g @openai/codex</code> only updates the binary, the actual reload is exiting the current Codex process (Ctrl+C in the terminal, or close the panel) and running <code>codex</code> again from the workspace root.</div>
   </div>
 
   <div class="spacer"></div>
@@ -1921,6 +1927,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v2.0</td><td>July 2026</td><td>Documented the real skills path: <code>npx skills add</code> installs to <code>.agents/skills/</code> (the shared store), and Codex must be launched from the workspace root to discover it. Clarified that reloading skills means exiting and relaunching Codex, not just <code>npm i -g</code>.</td></tr>
           <tr><td>v1.9</td><td>July 2026</td><td>Fixed the Vercel skills install command. The old <code>--skill frontend-design</code> name doesn't exist in that repo; corrected to a single <code>npx skills add vercel-labs/agent-skills</code> that installs all 9 (the design one is <code>web-design-guidelines</code>).</td></tr>
           <tr><td>v1.8</td><td>June 2026</td><td>Added a curated "Notable skills worth knowing" list to the Skills section: frontend-design, impeccable, accessibility, playwright, handoff, grill-me. Clearly marked as a dated snapshot, not a live ranking.</td></tr>
           <tr><td>v1.7</td><td>June 2026</td><td>Bumped to Codex CLI v0.142. Added MCP tool-search-by-default note, <code>/usage</code> credits and rollout token budgets in Cost &amp; Limits, and a permanent-session-deletion note alongside archiving.</td></tr>
@@ -1944,7 +1951,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v1.9 &nbsp;&middot;&nbsp; Codex CLI v0.142</p>
+    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v2.0 &nbsp;&middot;&nbsp; Codex CLI v0.142</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
