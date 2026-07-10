@@ -2252,6 +2252,8 @@ function sbCopy(btn, text) {
     const body = section.querySelector(':scope > .sec-body');
     const chev = section.querySelector('.sec-chevron');
     if (!body) return;
+    // never let a stale inline max-height override the classes
+    body.style.maxHeight = '';
     if (open) {
       body.classList.remove('closed');
       body.classList.add('open');
@@ -2281,6 +2283,7 @@ function sbCopy(btn, text) {
     const headerBlock = header.closest('.daily-section') || header;
     const body = document.createElement('div');
     body.className = 'sec-body';
+    body.style.maxHeight = '';
 
     let node = headerBlock.nextSibling;
     while (node) {
