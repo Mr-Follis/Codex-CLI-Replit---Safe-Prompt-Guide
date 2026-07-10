@@ -2259,13 +2259,15 @@ function sbCopy(btn, text) {
       if (chev) chev.textContent = '▼';
       section.dataset.open = 'true';
     } else {
-      // fix current height first so the transition has something to animate from
+      // If maxHeight is 'none' there's nothing to animate from, so pin the real height first
       body.style.maxHeight = body.scrollHeight + 'px';
+      // force a reflow so the browser registers the pinned height before we shrink it
+      void body.offsetHeight;
       requestAnimationFrame(() => {
         body.classList.add('closed');
         body.style.maxHeight = '0px';
       });
-      if (chev) chev.textContent = '▶';
+      if (chev) chev.textContent = '\u25b6';
       section.dataset.open = 'false';
     }
   }
