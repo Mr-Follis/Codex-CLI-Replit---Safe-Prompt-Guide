@@ -101,6 +101,18 @@ img,svg{max-width:100%;height:auto}
 @media (prefers-color-scheme: light){.sister-text,.sister-arrow{color:#b45309}}
 @media(max-width:480px){.sister-label{display:none}}
 
+
+/* ── COLLAPSIBLE SECTIONS ── */
+.section-header.sec-toggle{cursor:pointer;user-select:none;border-radius:var(--radius-sm);transition:background .15s;padding:4px 6px;margin-left:-6px;margin-right:-6px}
+.section-header.sec-toggle:hover{background:var(--bg2)}
+.sec-chevron{margin-left:auto;font-size:12px;color:var(--text-muted);transition:transform .25s;flex-shrink:0;padding-left:8px}
+.sec-body{overflow:hidden;transition:max-height .35s ease}
+.sec-body.closed{max-height:0 !important}
+/* Expand/collapse all control */
+#expand-all-bar{display:flex;justify-content:flex-end;gap:8px;padding:0 0 4px;margin-top:-8px}
+.xa-btn{background:var(--bg2);border:1px solid var(--border);color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:500;padding:5px 12px;border-radius:20px;cursor:pointer;transition:border-color .2s,color .2s}
+.xa-btn:hover{border-color:var(--amber);color:var(--amber)}
+
 /* ── WHAT'S NEW BANNER ── */
 #whats-new-wrapper{background:linear-gradient(135deg,rgba(74,222,128,0.06),rgba(74,222,128,0.02));border-bottom:1px solid rgba(74,222,128,0.15)}
 #whats-new-toggle{width:100%;display:flex;align-items:center;gap:10px;padding:10px clamp(16px,4vw,48px);background:transparent;border:none;cursor:pointer;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500}
@@ -423,6 +435,14 @@ pre code{white-space:pre}
       <a href="#skills" class="nav-btn purple-tint"><span class="nav-icon">🧩</span>Skills</a>
       <a href="#troubleshoot" class="nav-btn red-tint"><span class="nav-icon">🔧</span>Troubleshoot</a>
     </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div id="expand-all-bar">
+    <button class="xa-btn" onclick="expandAllSections(true)">Expand all</button>
+    <button class="xa-btn" onclick="expandAllSections(false)">Collapse all</button>
   </div>
 </div>
 
@@ -2219,6 +2239,106 @@ function sbCopy(btn, text) {
     btn.classList.remove('copied');
   }, 2000);
 }
+
+// ── COLLAPSIBLE SECTIONS ──
+(function () {
+  // Sections that stay open on load (daily-use). Everything else starts collapsed.
+  const OPEN_BY_DEFAULT = ['install', 'kickoff', 'checkpoint', 'wrapup'];
+  // Sections we never collapse (orientation is a one-line banner)
+  const SKIP = ['orientation'];
+
+  function setOpen(section, open) {
+    const body = section.querySelector(':scope > .sec-body');
+    const chev = section.querySelector('.sec-chevron');
+    if (!body) return;
+    if (open) {
+      body.classList.remove('closed');
+      body.style.maxHeight = body.scrollHeight + 'px';
+      // let it grow naturally after the transition
+      setTimeout(() => { if (!body.classList.contains('closed')) body.style.maxHeight = 'none'; }, 360);
+      if (chev) chev.textContent = '▼';
+      section.dataset.open = 'true';
+    } else {
+      // fix current height first so the transition has something to animate from
+      body.style.maxHeight = body.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        body.classList.add('closed');
+        body.style.maxHeight = '0px';
+      });
+      if (chev) chev.textContent = '▶';
+      section.dataset.open = 'false';
+    }
+  }
+
+  function toggle(section) {
+    setOpen(section, section.dataset.open !== 'true');
+  }
+
+  document.querySelectorAll('section[id]').forEach(section => {
+    const id = section.id;
+    if (SKIP.includes(id)) return;
+
+    // The header might be directly in the section, or nested inside .daily-section
+    const header = section.querySelector('.section-header');
+    if (!header) return;
+
+    // Everything after the header's top-level container becomes the body
+    const headerBlock = header.closest('.daily-section') || header;
+    const body = document.createElement('div');
+    body.className = 'sec-body';
+
+    let node = headerBlock.nextSibling;
+    while (node) {
+      const next = node.nextSibling;
+      body.appendChild(node);
+      node = next;
+    }
+    section.appendChild(body);
+
+    // Make the header clickable
+    header.classList.add('sec-toggle');
+    const chev = document.createElement('span');
+    chev.className = 'sec-chevron';
+    chev.textContent = '▶';
+    header.appendChild(chev);
+    header.addEventListener('click', () => toggle(section));
+
+    // Initial state
+    setOpen(section, OPEN_BY_DEFAULT.includes(id));
+  });
+
+  // Expand / collapse all
+  window.expandAllSections = function (open) {
+    document.querySelectorAll('section[id]').forEach(section => {
+      if (SKIP.includes(section.id)) return;
+      if (section.querySelector(':scope > .sec-body')) setOpen(section, open);
+    });
+  };
+
+  // Auto-open a section when jumped to via nav, sidebar, or a #hash on load
+  function openTarget(hash) {
+    if (!hash) return;
+    const el = document.querySelector(hash);
+    if (!el) return;
+    const section = el.closest ? (el.matches('section[id]') ? el : el.closest('section[id]')) : null;
+    if (section && section.dataset.open === 'false') setOpen(section, true);
+    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  }
+
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const hash = a.getAttribute('href');
+    if (hash && hash.length > 1) {
+      e.preventDefault();
+      openTarget(hash);
+      history.replaceState(null, '', hash);
+    }
+  });
+
+  if (location.hash) openTarget(location.hash);
+})();
+
 </script>
 </body>
 </html>
