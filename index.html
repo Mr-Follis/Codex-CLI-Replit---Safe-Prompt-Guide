@@ -479,11 +479,16 @@ pre code{white-space:pre}
   <div class="card recommended">
     <span class="card-badge badge-recommended">★ Start Here</span>
     <h3>Fresh Install (Replit Shell)</h3>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">One paste. It moves to the workspace root, installs (or updates) Codex, then launches it straight away. Starting from the root is what lets Codex discover skills in <code>.agents/skills</code>.</p>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
-      <pre><code>npm i -g @openai/codex</code></pre>
+      <pre><code>cd /home/runner/workspace && npm i -g @openai/codex && codex</code></pre>
     </div>
-    <p style="font-size:13px;color:var(--text-muted);margin-top:10px">Requires Node.js 18+. Replit environments come with Node already. Codex CLI is built in Rust so it's fast, but installs via npm.</p>
+    <p style="font-size:13px;color:var(--text-muted);margin-top:10px">Requires Node.js 18+. Replit environments come with Node already. Codex CLI is built in Rust so it's fast, but installs via npm. If your project sits somewhere other than <code>/home/runner/workspace</code>, swap that path for your own repo root.</p>
+    <div class="banner banner-amber" style="margin-top:12px">
+      <span class="banner-icon">💡</span>
+      <div>Run this in the Replit <strong>Shell tab</strong>, not the Agent panel. The Agent panel has no TTY, so the interactive Codex TUI refuses to start there with a <code>TERM is set to "dumb"</code> error. For headless use, run <code>codex exec "your task"</code> instead.</div>
+    </div>
   </div>
 
   <div class="spacer"></div>
@@ -1667,8 +1672,8 @@ sandbox_mode = "read-only"</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td>Install Codex CLI</td>
-        <td><code>npm i -g @openai/codex</code></td>
+        <td>Install (or update) Codex and launch it</td>
+        <td><code>cd /home/runner/workspace && npm i -g @openai/codex && codex</code></td>
       </tr>
       <tr>
         <td>Authenticate (Replit shell, no browser)</td>
@@ -1982,6 +1987,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v2.2</td><td>July 2026</td><td>Install is now a single chained command that cds to the workspace root, installs/updates Codex, and launches it. Added the <code>TERM is set to "dumb"</code> Shell-tab-vs-Agent-panel gotcha.</td></tr>
           <tr><td>v2.1</td><td>July 2026</td><td>GPT-5.6 general availability. Rewrote the Models section for Sol/Terra/Luna (1.05M context), added the <code>medium/high/max/ultra</code> effort levels, flagged the <code>gpt-5.4</code> retirement (23 July) and <code>gpt-5.3-codex</code> deprecation, switched the config starter to Terra with a <code>deep</code> Sol profile, added a supervise-long-runs caution, and noted the Codex desktop app merging into ChatGPT (CLI unaffected). Bumped to Codex CLI v0.143.</td></tr>
           <tr><td>v2.0</td><td>July 2026</td><td>Documented the real skills path: <code>npx skills add</code> installs to <code>.agents/skills/</code> (the shared store), and Codex must be launched from the workspace root to discover it. Clarified that reloading skills means exiting and relaunching Codex, not just <code>npm i -g</code>.</td></tr>
           <tr><td>v1.9</td><td>July 2026</td><td>Fixed the Vercel skills install command. The old <code>--skill frontend-design</code> name doesn't exist in that repo; corrected to a single <code>npx skills add vercel-labs/agent-skills</code> that installs all 9 (the design one is <code>web-design-guidelines</code>).</td></tr>
@@ -2007,7 +2013,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.1 &nbsp;&middot;&nbsp; Codex CLI v0.143</p>
+    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.2 &nbsp;&middot;&nbsp; Codex CLI v0.143</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
@@ -2039,7 +2045,7 @@ codex auth login --device</code></pre>
 </div>
 
 <!-- Hidden prompt templates for the sidebar (raw text, no escaping needed) -->
-<script type="text/template" id="tpl-install">npm i -g @openai/codex</script>
+<script type="text/template" id="tpl-install">cd /home/runner/workspace && npm i -g @openai/codex && codex</script>
 <script type="text/template" id="tpl-kickoff">codex "Read AGENTS.md and CONTEXT.md first. Then confirm:
 1. The current project context you have loaded
 2. What was last worked on
