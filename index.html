@@ -2260,9 +2260,12 @@ function sbCopy(btn, text) {
     const chev = section.querySelector('.sec-chevron');
     if (!body) return;
     if (open) {
+      // Un-cap first so scrollHeight reports the true content height
       body.classList.remove('closed');
-      // generous cap; never 'none' so max-height always has a value to animate to/from
-      body.style.maxHeight = Math.max(body.scrollHeight + 200, 400) + 'px';
+      body.style.maxHeight = '';
+      const full = body.scrollHeight;
+      void body.offsetHeight;
+      body.style.maxHeight = (full + 240) + 'px';
       section.dataset.open = 'true';
       if (chev) chev.textContent = '\u25bc';
     } else {
