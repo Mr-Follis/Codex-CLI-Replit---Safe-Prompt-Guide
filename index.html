@@ -1162,10 +1162,50 @@ Do not start any new work. Just wrap up and summarise.</code></pre>
   <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">The approval policy controls when Codex asks for human confirmation regardless of sandbox mode.</p>
   <div class="code-block">
     <div class="code-header"><span class="code-lang">~/.codex/config.toml</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
-    <pre><code>model = "gpt-5.5"
+    <pre><code>model = "gpt-5.6-terra"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 web_search = "cached"</code></pre>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>"Why is it still asking me?"</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">The single most common frustration: you set a permissive mode and Codex <em>still</em> stops to ask. Usually one of these four is why.</p>
+
+  <div class="card" style="margin-bottom:10px">
+    <h4 style="margin-top:0">1. <code>--full-auto</code> is older, more limited behaviour</h4>
+    <p style="font-size:13px;color:var(--text-muted)">It doesn't mean "never ask." It can still stop and prompt when a task needs to escape the sandbox. If you expected total silence and didn't get it, this is often the culprit.</p>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <h4 style="margin-top:0">2. <code>workspace-write</code> still protects a lot</h4>
+    <p style="font-size:13px;color:var(--text-muted)">This is the one that catches everyone. Even in workspace-write, Codex guards <code>.git/</code>, <code>.codex/</code>, commits, package installs, network access, and anything outside the project directory. Writing a source file is allowed. Committing it is not, without asking.</p>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <h4 style="margin-top:0">3. A project config may be overriding you</h4>
+    <p style="font-size:13px;color:var(--text-muted)">A <code>.codex/config.toml</code> inside the repo takes precedence over your user config at <code>~/.codex/config.toml</code>. If your global settings seem to be ignored, check whether the project is quietly overriding them.</p>
+  </div>
+  <div class="card">
+    <h4 style="margin-top:0">4. Hook trust prompts are a separate system</h4>
+    <p style="font-size:13px;color:var(--text-muted)">Approvals and sandboxing are one thing; trusting hooks is another. If it's hook prompts specifically that keep interrupting you, no amount of sandbox loosening will silence them, they have their own bypass flag.</p>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>The escape hatch (last resort)</h3>
+  <div class="banner banner-red">
+    <span class="banner-icon">🛑</span>
+    <div><strong>This turns off both approvals and the sandbox.</strong> Codex can then run any command, reach the network, touch files outside the project, and commit, with nothing stopping it. Use it only in a <strong>disposable repo or throwaway worktree</strong> where you genuinely do not care what happens. Never on a live project, never on a repo you didn't write, and never as your default.</div>
+  </div>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash (disposable repos only)</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
+    <pre><code>codex --dangerously-bypass-approvals-and-sandbox</code></pre>
+  </div>
+  <p style="font-size:13px;color:var(--text-muted);margin-top:10px">If hook trust prompts are <em>also</em> in the way, that's the separate system from point 4 above, and it has its own flag to pair with the one here. Run <code>codex --help | grep -i bypass</code> to see the exact flag names your installed build supports, since they have changed between versions.</p>
+
+  <div class="banner banner-amber" style="margin-top:12px">
+    <span class="banner-icon">💡</span>
+    <div><strong>Better than bypassing:</strong> stay on <code>workspace-write</code> and just approve the handful of prompts. The things it guards (commits, installs, network, files outside the project) are exactly the things worth a two-second glance. Reserve the bypass for scratch repos.</div>
   </div>
 
   <div class="spacer"></div>
@@ -1183,7 +1223,7 @@ web_search = "cached"</code></pre>
       <div class="code-block">
         <div class="code-header"><span class="code-lang">config.toml</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
         <pre><code>[profiles.daily]
-model = "gpt-5.5"
+model = "gpt-5.6-terra"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 
@@ -1987,6 +2027,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v2.3</td><td>July 2026</td><td>Added a "Why is it still asking me?" block to Approval Modes covering <code>--full-auto</code> limits, what <code>workspace-write</code> still guards (<code>.git/</code>, commits, installs, network), project config overrides, and hook trust being a separate system. Added a fenced last-resort bypass card for disposable repos.</td></tr>
           <tr><td>v2.2</td><td>July 2026</td><td>Install is now a single chained command that cds to the workspace root, installs/updates Codex, and launches it. Added the <code>TERM is set to "dumb"</code> Shell-tab-vs-Agent-panel gotcha.</td></tr>
           <tr><td>v2.1</td><td>July 2026</td><td>GPT-5.6 general availability. Rewrote the Models section for Sol/Terra/Luna (1.05M context), added the <code>medium/high/max/ultra</code> effort levels, flagged the <code>gpt-5.4</code> retirement (23 July) and <code>gpt-5.3-codex</code> deprecation, switched the config starter to Terra with a <code>deep</code> Sol profile, added a supervise-long-runs caution, and noted the Codex desktop app merging into ChatGPT (CLI unaffected). Bumped to Codex CLI v0.143.</td></tr>
           <tr><td>v2.0</td><td>July 2026</td><td>Documented the real skills path: <code>npx skills add</code> installs to <code>.agents/skills/</code> (the shared store), and Codex must be launched from the workspace root to discover it. Clarified that reloading skills means exiting and relaunching Codex, not just <code>npm i -g</code>.</td></tr>
@@ -2013,7 +2054,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.2 &nbsp;&middot;&nbsp; Codex CLI v0.143</p>
+    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.3 &nbsp;&middot;&nbsp; Codex CLI v0.143</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
