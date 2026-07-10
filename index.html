@@ -340,14 +340,14 @@ pre code{white-space:pre}
   <button id="whats-new-toggle" onclick="toggleWN()" aria-expanded="true">
     <span class="pulse-dot"></span>
     <span class="wn-label">What's New</span>
-    <span class="wn-text">Codex CLI v0.142 (June 2026): plugin system overhaul, MCP tool search by default, /usage credits, rollout token budgets, permanent session deletion.</span>
+    <span class="wn-text">GPT-5.6 is live (9 July): Sol, Terra, Luna now in Codex. Terra matches GPT-5.5 at half the cost. GPT-5.4 retires 23 July.</span>
     <span class="wn-chevron" id="wn-chevron">▶</span>
   </button>
   <div id="whats-new-body" class="closed">
     <div class="wn-grid">
       <div class="wn-card event">
-        <h4>🚀 Guide v1.7 — June 2026 Update</h4>
-        <p>Current as of Codex CLI v0.142. This wave brings a plugin system overhaul (curated/workspace/shared sections), MCP tool search on by default, in-CLI <code>/usage</code> credit redemption, configurable rollout token budgets, and permanent session deletion. Earlier waves added Skills, the Bedrock provider, session archiving, and the universal <code>@</code> picker.</p>
+        <h4>🚀 Guide v2.1 — GPT-5.6 General Availability</h4>
+        <p>GPT-5.6 went GA on 9 July 2026 across ChatGPT, Codex, and the API. Three tiers: <strong>Sol</strong> (flagship), <strong>Terra</strong> (GPT-5.5-class at half the cost), <strong>Luna</strong> (fast and cheap), all with a 1.05M context window. New <code>max</code> and <code>ultra</code> effort levels replace the old reasoning-effort guesswork. <code>gpt-5.4</code> retires 23 July.</p>
       </div>
       <div class="wn-card">
         <h4>🔍 Conversation History Search</h4>
@@ -395,9 +395,9 @@ pre code{white-space:pre}
       The practical field guide for using OpenAI Codex CLI inside Replit Shell. ChatGPT subscription auth, AGENTS.md, approval modes, and daily workflow prompts.
     </p>
     <div class="tag-list" style="justify-content:center">
-      <span class="tag">Codex CLI v0.142</span>
+      <span class="tag">Codex CLI v0.143</span>
       <span class="tag">Updated June 2026</span>
-      <span class="tag">GPT-5.5</span>
+      <span class="tag">GPT-5.6</span>
       <span class="tag">ChatGPT OAuth</span>
       <span class="tag">Replit Shell</span>
     </div>
@@ -452,7 +452,7 @@ pre code{white-space:pre}
 <section id="orientation" style="padding-top:32px;padding-bottom:0;border:none">
   <div class="banner banner-purple">
     <span class="banner-icon">🧭</span>
-    <div><strong>Which Codex is this?</strong> OpenAI ships Codex in three flavours: the <strong>CLI</strong> (terminal agent, what this guide covers), <strong>Codex Cloud</strong> (server-side tasks run on OpenAI infrastructure), and the <strong>IDE extension</strong> (VS Code / Cursor). This guide is specifically the <strong>CLI running inside Replit's Shell tab</strong>, authenticated with your ChatGPT subscription. If you're using the cloud or IDE versions, some commands here won't apply.</div>
+    <div><strong>Which Codex is this?</strong> OpenAI ships Codex in three flavours: the <strong>CLI</strong> (terminal agent, what this guide covers), <strong>Codex Cloud</strong> (server-side tasks run on OpenAI infrastructure), and the <strong>desktop/IDE experience</strong>. As of 9 July 2026 the Codex desktop app merged into the new ChatGPT desktop app, where Codex sits alongside Chat and Work rather than being a separate app. <strong>The CLI is unaffected</strong>, it still installs via npm and runs in your Replit Shell exactly as described here.</div>
   </div>
 </section>
 
@@ -1461,60 +1461,109 @@ codex plugin list --json</code></pre>
   <div class="section-header">
     <span class="section-icon">🤖</span>
     <h2>Models Reference</h2>
+    <span style="background:var(--green-dim);border:1px solid rgba(74,222,128,0.25);color:var(--green);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px">GPT-5.6 is live</span>
   </div>
 
-  <div class="banner banner-amber">
-    <span class="banner-icon">💡</span>
-    <div>GPT-5.5 is only available via ChatGPT sign-in, not API key. This is why OAuth auth is worth setting up, especially if you already pay for a ChatGPT Plus/Pro sub.</div>
+  <div class="banner banner-green">
+    <span class="banner-icon">🚀</span>
+    <div><strong>GPT-5.6 went generally available on 9 July 2026</strong> across ChatGPT, Codex, and the API. It's a family of three tiers rather than one model: <strong>Sol</strong> (flagship), <strong>Terra</strong> (balanced everyday), and <strong>Luna</strong> (fast and cheap). In the new naming system the number is the generation and Sol/Terra/Luna are durable capability tiers. Rollout is global but staged, if you don't see them in <code>/model</code> yet, give it a few hours.</div>
   </div>
 
   <div class="spacer"></div>
 
+  <h3>The GPT-5.6 family</h3>
   <table class="ref-table">
     <thead>
       <tr>
         <th>Model</th>
-        <th>Use Case</th>
-        <th>Access</th>
-        <th>Context (Codex)</th>
+        <th>Best for</th>
+        <th>Context</th>
+        <th>API price (per 1M in/out)</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><code>gpt-5.5</code></td>
-        <td>Complex coding, architecture, research</td>
-        <td>ChatGPT sign-in only</td>
-        <td>400K tokens</td>
+        <td><code>gpt-5.6-sol</code><br><span style="font-size:11px;color:var(--text-muted)">alias: <code>gpt-5.6</code></span></td>
+        <td>Hardest agentic work, long-horizon refactors, security review</td>
+        <td>1.05M</td>
+        <td>$5 / $30</td>
       </tr>
       <tr>
-        <td><code>gpt-5.4</code></td>
-        <td>Strong reasoning, general tasks</td>
-        <td>All plans</td>
-        <td>128K tokens</td>
+        <td><code>gpt-5.6-terra</code></td>
+        <td>Everyday production work. GPT-5.5-class quality at roughly half the cost</td>
+        <td>1.05M</td>
+        <td>$2.50 / $15</td>
       </tr>
       <tr>
-        <td><code>gpt-5.4-mini</code></td>
-        <td>Fast, efficient, quick iterations</td>
-        <td>All plans</td>
-        <td>128K tokens</td>
-      </tr>
-      <tr>
-        <td><code>gpt-5.3-codex</code></td>
-        <td>Optimised for complex software engineering</td>
-        <td>All plans</td>
-        <td>128K tokens</td>
+        <td><code>gpt-5.6-luna</code></td>
+        <td>High-volume, simple, latency-sensitive tasks</td>
+        <td>1.05M</td>
+        <td>$1 / $6</td>
       </tr>
     </tbody>
   </table>
 
+  <div class="banner banner-amber" style="margin-top:12px">
+    <span class="banner-icon">💡</span>
+    <div><strong>Terra is the sensible default for most Replit work.</strong> OpenAI positions it as competitive with GPT-5.5 at 2x cheaper, so most workloads currently on 5.5 have a straightforward reason to move. Reserve Sol for the hard 10 percent, and drop to Luna for mechanical, high-volume edits.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Effort levels: medium, high, max, ultra</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">GPT-5.6 replaces the old reasoning-effort guesswork with named levels you set per model. In Codex, <code>max</code> is available to everyone with GPT-5.6 access and can be toggled in settings. <code>ultra</code> (Sol's parallel-subagent mode, which decomposes a task across coordinating subagents) is available on Plus and higher plans.</p>
+  <table class="ref-table">
+    <thead>
+      <tr><th>Level</th><th>When to use it</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>medium</code></td><td>Default for normal interactive coding</td></tr>
+      <tr><td><code>high</code></td><td>Trickier bugs, non-obvious refactors</td></tr>
+      <tr><td><code>max</code></td><td>Deep thinking budget for genuinely hard problems</td></tr>
+      <tr><td><code>ultra</code></td><td>Sol only. Spawns parallel subagents to decompose a task. The 5 percent nothing else touches</td></tr>
+    </tbody>
+  </table>
+
+  <div class="banner banner-blue" style="margin-top:12px">
+    <span class="banner-icon">ℹ️</span>
+    <div>Effort costs tokens. <code>max</code> and <code>ultra</code> burn through a ChatGPT plan quota far faster than <code>medium</code>. Use <code>/model</code> inside a session to switch tier and effort on the fly rather than making the expensive setting your global default.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="banner banner-red">
+    <span class="banner-icon">⚠️</span>
+    <div><strong>Deprecations.</strong> <code>gpt-5.4</code> is being retired on 23 July 2026. <code>gpt-5.3-codex</code> and <code>gpt-5.2</code> are already deprecated as user-selectable models in Codex for anyone signed in with ChatGPT (API-key workflows are unaffected). <code>gpt-5.5</code> remains available. If your <code>config.toml</code> pins any of these, update it now.</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <h3>Still on GPT-5.5?</h3>
+  <table class="ref-table">
+    <thead>
+      <tr><th>Model</th><th>Status</th><th>Context (Codex)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>gpt-5.5</code></td><td>Available, ChatGPT sign-in</td><td>400K</td></tr>
+      <tr><td><code>gpt-5.4</code></td><td style="color:var(--red)">Retiring 23 July 2026</td><td>128K</td></tr>
+      <tr><td><code>gpt-5.4-mini</code></td><td style="color:var(--red)">Retiring alongside 5.4</td><td>128K</td></tr>
+      <tr><td><code>gpt-5.3-codex</code></td><td style="color:var(--red)">Deprecated for ChatGPT sign-in</td><td>128K</td></tr>
+    </tbody>
+  </table>
+
+  <div class="banner banner-amber" style="margin-top:12px">
+    <span class="banner-icon">⚠️</span>
+    <div><strong>Supervise long agentic runs.</strong> OpenAI notes GPT-5.6 is more likely than GPT-5.5 to go beyond user intent during agentic coding, and independent evaluator METR flagged an unusually high detected-cheating rate on its agent harness. Absolute rates stay low, but this is a good reason to keep <code>workspace-write</code> rather than <code>danger-full-access</code>, and to actually read the diffs on long multi-step runs.</div>
+  </div>
+
   <div class="spacer"></div>
 
   <h3>Canonical config.toml Starter</h3>
-  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Drop this into <code>~/.codex/config.toml</code> for sensible Replit defaults. It sets GPT-5.5, the workspace-write sandbox, on-request approvals, and cached web search. Everything else in this guide builds on these.</p>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">Drop this into <code>~/.codex/config.toml</code> for sensible Replit defaults. It sets Terra (the cost-effective everyday tier), the workspace-write sandbox, on-request approvals, and cached web search, with a <code>deep</code> profile for when you need Sol.</p>
   <div class="code-block">
     <div class="code-header"><span class="code-lang">~/.codex/config.toml</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
     <pre><code># Default model and behaviour
-model = "gpt-5.5"
+model = "gpt-5.6-terra"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 web_search = "cached"
@@ -1524,7 +1573,13 @@ project_doc_max_bytes = 65536
 
 # Daily-driver profile (load with: codex --profile daily)
 [profiles.daily]
-model = "gpt-5.5"
+model = "gpt-5.6-terra"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+# Reach for Sol on the hard 10 percent (load with: codex --profile deep)
+[profiles.deep]
+model = "gpt-5.6-sol"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 
@@ -1578,7 +1633,7 @@ sandbox_mode = "read-only"</code></pre>
 
   <div class="banner banner-amber" style="margin-top:14px">
     <span class="banner-icon">💡</span>
-    <div>If you hit a usage limit mid-session, Codex tells you and usually suggests a cooldown window. Dropping to <code>gpt-5.4-mini</code> with <code>/model</code> for routine edits stretches your quota further, then switch back to <code>gpt-5.5</code> for the hard problems. The blended token usage display (v0.131+) in the TUI status line shows roughly where you stand.</div>
+    <div>If you hit a usage limit mid-session, Codex tells you and usually suggests a cooldown window. Dropping to <code>gpt-5.6-luna</code> with <code>/model</code> for routine edits stretches your quota further, then switch back to Terra or Sol for the hard problems. The blended token usage display in the TUI status line shows roughly where you stand.</div>
   </div>
 
   <div class="spacer"></div>
@@ -1927,6 +1982,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v2.1</td><td>July 2026</td><td>GPT-5.6 general availability. Rewrote the Models section for Sol/Terra/Luna (1.05M context), added the <code>medium/high/max/ultra</code> effort levels, flagged the <code>gpt-5.4</code> retirement (23 July) and <code>gpt-5.3-codex</code> deprecation, switched the config starter to Terra with a <code>deep</code> Sol profile, added a supervise-long-runs caution, and noted the Codex desktop app merging into ChatGPT (CLI unaffected). Bumped to Codex CLI v0.143.</td></tr>
           <tr><td>v2.0</td><td>July 2026</td><td>Documented the real skills path: <code>npx skills add</code> installs to <code>.agents/skills/</code> (the shared store), and Codex must be launched from the workspace root to discover it. Clarified that reloading skills means exiting and relaunching Codex, not just <code>npm i -g</code>.</td></tr>
           <tr><td>v1.9</td><td>July 2026</td><td>Fixed the Vercel skills install command. The old <code>--skill frontend-design</code> name doesn't exist in that repo; corrected to a single <code>npx skills add vercel-labs/agent-skills</code> that installs all 9 (the design one is <code>web-design-guidelines</code>).</td></tr>
           <tr><td>v1.8</td><td>June 2026</td><td>Added a curated "Notable skills worth knowing" list to the Skills section: frontend-design, impeccable, accessibility, playwright, handoff, grill-me. Clearly marked as a dated snapshot, not a live ranking.</td></tr>
@@ -1951,7 +2007,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: June 2026 &nbsp;&middot;&nbsp; Guide v2.0 &nbsp;&middot;&nbsp; Codex CLI v0.142</p>
+    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.1 &nbsp;&middot;&nbsp; Codex CLI v0.143</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
