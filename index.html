@@ -2143,6 +2143,13 @@ function toggleWN() {
 }
 
 // Collapsibles
+function reflowParentSection(el) {
+  const section = el.closest && el.closest('section[id]');
+  if (!section || section.dataset.open !== 'true') return;
+  const body = section.querySelector(':scope > .sec-body');
+  if (body) setTimeout(() => { body.style.maxHeight = (body.scrollHeight + 200) + 'px'; }, 380);
+}
+
 function toggleCollapse(id) {
   const body = document.getElementById(id);
   const chevron = document.getElementById(id + '-chevron');
@@ -2155,6 +2162,7 @@ function toggleCollapse(id) {
     body.classList.add('open');
     if (chevron) chevron.textContent = '▼';
   }
+  reflowParentSection(body);
 }
 
 // Copy button
@@ -2251,27 +2259,13 @@ function sbCopy(btn, text) {
     const body = section.querySelector(':scope > .sec-body');
     const chev = section.querySelector('.sec-chevron');
     if (!body) return;
-
-    // Always start from a concrete pixel height so the transition has endpoints
-    const full = body.scrollHeight;
-
     if (open) {
       body.classList.remove('closed');
-      body.style.maxHeight = full + 'px';
+      // generous cap; never 'none' so max-height always has a value to animate to/from
+      body.style.maxHeight = Math.max(body.scrollHeight + 200, 400) + 'px';
       section.dataset.open = 'true';
       if (chev) chev.textContent = '\u25bc';
-      // after the animation, release the cap so nested collapsibles can grow
-      clearTimeout(body._t);
-      body._t = setTimeout(() => {
-        if (section.dataset.open === 'true') body.style.maxHeight = 'none';
-      }, 380);
     } else {
-      clearTimeout(body._t);
-      // if it's uncapped, pin the real height, force a reflow, then shrink
-      if (body.style.maxHeight === 'none' || body.style.maxHeight === '') {
-        body.style.maxHeight = full + 'px';
-        void body.offsetHeight;
-      }
       body.classList.add('closed');
       body.style.maxHeight = '0px';
       section.dataset.open = 'false';
