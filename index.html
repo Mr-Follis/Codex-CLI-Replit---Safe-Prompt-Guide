@@ -353,14 +353,14 @@ pre code{white-space:pre}
   <button id="whats-new-toggle" onclick="toggleWN()" aria-expanded="true">
     <span class="pulse-dot"></span>
     <span class="wn-label">What's New</span>
-    <span class="wn-text">GPT-5.6 is live (9 July): Sol, Terra, Luna now in Codex. Terra matches GPT-5.5 at half the cost. GPT-5.4 retires 23 July.</span>
+    <span class="wn-text">Codex CLI v0.144: new <code>writes</code> app-approval mode, MCP tools can authenticate interactively, Bedrock now carries GPT-5.6 with max effort.</span>
     <span class="wn-chevron" id="wn-chevron">▶</span>
   </button>
   <div id="whats-new-body" class="closed">
     <div class="wn-grid">
       <div class="wn-card event">
-        <h4>🚀 Guide v2.1 — GPT-5.6 General Availability</h4>
-        <p>GPT-5.6 went GA on 9 July 2026 across ChatGPT, Codex, and the API. Three tiers: <strong>Sol</strong> (flagship), <strong>Terra</strong> (GPT-5.5-class at half the cost), <strong>Luna</strong> (fast and cheap), all with a 1.05M context window. New <code>max</code> and <code>ultra</code> effort levels replace the old reasoning-effort guesswork. <code>gpt-5.4</code> retires 23 July.</p>
+        <h4>🚀 Guide v2.5 — Codex CLI v0.144</h4>
+        <p>New <code>writes</code> app-approval mode sits between "approve everything" and "approve nothing": declared read-only actions run freely while writes still prompt. MCP tools can now request authentication interactively without an experimental opt-in. Amazon Bedrock gained GPT-5.6 Sol, Terra, and Luna with first-class <code>max</code> reasoning effort. Selecting Ultra now warns when high multi-agent concurrency could burn usage quickly.</p>
       </div>
       <div class="wn-card">
         <h4>🔍 Conversation History Search</h4>
@@ -408,7 +408,7 @@ pre code{white-space:pre}
       The practical field guide for using OpenAI Codex CLI inside Replit Shell. ChatGPT subscription auth, AGENTS.md, approval modes, and daily workflow prompts.
     </p>
     <div class="tag-list" style="justify-content:center">
-      <span class="tag">Codex CLI v0.143</span>
+      <span class="tag">Codex CLI v0.144</span>
       <span class="tag">Updated June 2026</span>
       <span class="tag">GPT-5.6</span>
       <span class="tag">ChatGPT OAuth</span>
@@ -542,7 +542,7 @@ codex</code></pre>
 
   <div class="banner banner-blue" style="margin-top:14px">
     <span class="banner-icon">ℹ️</span>
-    <div><strong>Third option — Amazon Bedrock (v0.137+):</strong> if your org runs OpenAI models through AWS, Codex can now use Amazon Bedrock as the model provider, with AWS-managed authentication, account controls, and billing. Overkill for a solo Replit setup, but worth knowing if you ever need enterprise AWS billing instead of a ChatGPT plan. See <a href="https://developers.openai.com/codex/" target="_blank">the Codex docs</a> for the config.</div>
+    <div><strong>Third option — Amazon Bedrock:</strong> if your org runs OpenAI models through AWS, Codex can use Amazon Bedrock as the model provider, with AWS-managed authentication, account controls, and billing. As of v0.143 Bedrock carries GPT-5.6 Sol, Terra, and Luna with first-class <code>max</code> reasoning effort, so it is no longer a second-class path. Still overkill for a solo Replit setup, but worth knowing if you ever need enterprise AWS billing instead of a ChatGPT plan. See <a href="https://developers.openai.com/codex/" target="_blank">the Codex docs</a> for the config.</div>
   </div>
 
   <div class="spacer"></div>
@@ -1213,6 +1213,20 @@ web_search = "cached"</code></pre>
 
   <div class="spacer"></div>
 
+  <h3>The middle ground: <code>writes</code> app-approval mode</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">New in v0.144. If the constant prompting is coming from <strong>Codex Apps and MCP tools</strong> rather than the filesystem sandbox, this is the setting you actually want. It lets tools that declare themselves read-only run without interruption, while anything that writes still stops and asks. You keep the guardrail on the operations that can change things, and lose the nagging on the ones that can't.</p>
+  <div class="banner banner-green">
+    <span class="banner-icon">✓</span>
+    <div>This is an <strong>app-approval</strong> mode, so it governs app and MCP tool calls, not the filesystem sandbox. Pair it with <code>workspace-write</code> and you've cut most of the noise without turning off a single meaningful protection. Reach for this before you reach for any bypass flag.</div>
+  </div>
+
+  <div class="banner banner-blue" style="margin-top:10px">
+    <span class="banner-icon">ℹ️</span>
+    <div>Also new in v0.144: MCP tools can request authentication interactively without an experimental opt-in, so a tool needing OAuth prompts you inline instead of failing.</div>
+  </div>
+
+  <div class="spacer"></div>
+
   <h3>The escape hatch (last resort)</h3>
   <div class="banner banner-red">
     <span class="banner-icon">🛑</span>
@@ -1592,7 +1606,7 @@ codex plugin list --json</code></pre>
 
   <div class="banner banner-blue" style="margin-top:12px">
     <span class="banner-icon">ℹ️</span>
-    <div>Effort costs tokens. <code>max</code> and <code>ultra</code> burn through a ChatGPT plan quota far faster than <code>medium</code>. Use <code>/model</code> inside a session to switch tier and effort on the fly rather than making the expensive setting your global default.</div>
+    <div>Effort costs tokens. <code>max</code> and <code>ultra</code> burn through a ChatGPT plan quota far faster than <code>medium</code>. Use <code>/model</code> inside a session to switch tier and effort on the fly rather than making the expensive setting your global default. As of v0.144 Codex warns you when selecting Ultra if high multi-agent concurrency could run your usage up quickly, worth heeding.</div>
   </div>
 
   <div class="spacer"></div>
@@ -2048,6 +2062,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v2.5</td><td>July 2026</td><td>Bumped to Codex CLI v0.144. Added the new <code>writes</code> app-approval mode as the middle ground between constant prompts and bypassing everything, noted MCP interactive auth, refreshed the Bedrock note for GPT-5.6 with <code>max</code> effort, and added the Ultra concurrency warning.</td></tr>
           <tr><td>v2.4</td><td>July 2026</td><td>Every section is now collapsible. Daily-use sections (Install, Kick-Off, Checkpoint, End-of-Day) open by default, the rest start collapsed. Added Expand all / Collapse all so Ctrl+F still works, and nav or sidebar jumps auto-open their target section.</td></tr>
           <tr><td>v2.3</td><td>July 2026</td><td>Added a "Why is it still asking me?" block to Approval Modes covering <code>--full-auto</code> limits, what <code>workspace-write</code> still guards (<code>.git/</code>, commits, installs, network), project config overrides, and hook trust being a separate system. Added a fenced last-resort bypass card for disposable repos.</td></tr>
           <tr><td>v2.2</td><td>July 2026</td><td>Install is now a single chained command that cds to the workspace root, installs/updates Codex, and launches it. Added the <code>TERM is set to "dumb"</code> Shell-tab-vs-Agent-panel gotcha.</td></tr>
@@ -2076,7 +2091,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.4 &nbsp;&middot;&nbsp; Codex CLI v0.143</p>
+    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.5 &nbsp;&middot;&nbsp; Codex CLI v0.144</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
