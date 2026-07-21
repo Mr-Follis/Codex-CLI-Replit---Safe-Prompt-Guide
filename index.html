@@ -823,7 +823,7 @@ Thumbs.db
 
   <div class="banner banner-green" style="margin-top:14px">
     <span class="banner-icon">🔒</span>
-    <div><strong>Codex hardens itself too.</strong> Recent releases tightened command safety: <code>/diff</code> no longer runs repository-provided Git helpers or hooks, PowerShell parser execution is blocked on non-Windows hosts, and browser-origin exec-server handshakes are rejected. These close paths where a malicious repo could trick the agent into running code. Keep Codex updated (<code>npm i -g @openai/codex</code>) to stay current on these.</div>
+    <div><strong>Codex hardens itself too.</strong> Recent releases tightened command safety: <code>/diff</code> no longer runs repository-provided Git helpers or hooks, PowerShell parser execution is blocked on non-Windows hosts, and browser-origin exec-server handshakes are rejected. v0.144 also improved dangerous-command detection, catching more disguised <code>rm</code> forms and giving clearer reasons when a command is rejected. These close paths where a malicious repo could trick the agent into running code. Keep Codex updated (<code>npm i -g @openai/codex</code>) to stay current on these.</div>
   </div>
 </section>
 
@@ -1565,19 +1565,19 @@ codex plugin list --json</code></pre>
       <tr>
         <td><code>gpt-5.6-sol</code><br><span style="font-size:11px;color:var(--text-muted)">alias: <code>gpt-5.6</code></span></td>
         <td>Hardest agentic work, long-horizon refactors, security review</td>
-        <td>1.05M</td>
+        <td>272K</td>
         <td>$5 / $30</td>
       </tr>
       <tr>
         <td><code>gpt-5.6-terra</code></td>
         <td>Everyday production work. GPT-5.5-class quality at roughly half the cost</td>
-        <td>1.05M</td>
+        <td>272K</td>
         <td>$2.50 / $15</td>
       </tr>
       <tr>
         <td><code>gpt-5.6-luna</code></td>
         <td>High-volume, simple, latency-sensitive tasks</td>
-        <td>1.05M</td>
+        <td>272K</td>
         <td>$1 / $6</td>
       </tr>
     </tbody>
@@ -2062,6 +2062,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v2.6</td><td>July 2026</td><td>Corrected the GPT-5.6 context window to 272K tokens (OpenAI revised it down from the launch-day figure). Noted tougher dangerous-command detection with clearer rejection reasons in the Safety section.</td></tr>
           <tr><td>v2.5</td><td>July 2026</td><td>Bumped to Codex CLI v0.144. Added the new <code>writes</code> app-approval mode as the middle ground between constant prompts and bypassing everything, noted MCP interactive auth, refreshed the Bedrock note for GPT-5.6 with <code>max</code> effort, and added the Ultra concurrency warning.</td></tr>
           <tr><td>v2.4</td><td>July 2026</td><td>Every section is now collapsible. Daily-use sections (Install, Kick-Off, Checkpoint, End-of-Day) open by default, the rest start collapsed. Added Expand all / Collapse all so Ctrl+F still works, and nav or sidebar jumps auto-open their target section.</td></tr>
           <tr><td>v2.3</td><td>July 2026</td><td>Added a "Why is it still asking me?" block to Approval Modes covering <code>--full-auto</code> limits, what <code>workspace-write</code> still guards (<code>.git/</code>, commits, installs, network), project config overrides, and hook trust being a separate system. Added a fenced last-resort bypass card for disposable repos.</td></tr>
@@ -2091,7 +2092,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.5 &nbsp;&middot;&nbsp; Codex CLI v0.144</p>
+    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.6 &nbsp;&middot;&nbsp; Codex CLI v0.144</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
