@@ -510,6 +510,10 @@ pre code{white-space:pre}
       <span class="banner-icon">💡</span>
       <div>Run this in the Replit <strong>Shell tab</strong>, not the Agent panel. The Agent panel has no TTY, so the interactive Codex TUI refuses to start there with a <code>TERM is set to "dumb"</code> error. For headless use, run <code>codex exec "your task"</code> instead.</div>
     </div>
+    <div class="banner banner-blue" style="margin-top:10px">
+      <span class="banner-icon">🔄</span>
+      <div><strong>If your environment rebuilds daily</strong>, three things follow. The <code>npm i -g</code> step is only needed when the environment actually resets, otherwise install once and update periodically. Your <code>~/.codex/config.toml</code> gets wiped too, so config-based settings won't persist and command-line flags become more reliable than config. And a managed workspace policy can override or prohibit full access regardless of what your config or flags say, so if a setting seems ignored, that's worth checking before you debug further.</div>
+    </div>
   </div>
 
   <div class="spacer"></div>
@@ -1236,6 +1240,18 @@ web_search = "cached"</code></pre>
     <div class="code-header"><span class="code-lang">bash (disposable repos only)</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
     <pre><code>codex --dangerously-bypass-approvals-and-sandbox</code></pre>
   </div>
+
+  <p style="font-size:13px;color:var(--text-muted);margin-top:10px">Newer builds also expose a shorter <code>--yolo</code> flag for the same thing. Check yours with <code>codex --help | grep -i yolo</code> before relying on it, flag names have changed between versions.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash (same danger, shorter)</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
+    <pre><code>codex --yolo</code></pre>
+  </div>
+
+  <div class="banner banner-red" style="margin-top:12px">
+    <span class="banner-icon">🔑</span>
+    <div><strong>YOLO means unrestricted command, filesystem, and usually network access.</strong> Only use it in an isolated environment with no valuable credentials or files. That caveat matters in Replit specifically: a typical workspace holds your GitHub token in Secrets, your <code>.env</code>, and your live project. If that describes your setup, it is not an isolated environment, and <code>workspace-write</code> is the right call.</div>
+  </div>
+
   <p style="font-size:13px;color:var(--text-muted);margin-top:10px">If hook trust prompts are <em>also</em> in the way, that's the separate system from point 4 above, and it has its own flag to pair with the one here. Run <code>codex --help | grep -i bypass</code> to see the exact flag names your installed build supports, since they have changed between versions.</p>
 
   <div class="banner banner-amber" style="margin-top:12px">
@@ -2062,6 +2078,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v2.7</td><td>July 2026</td><td>Documented <code>--yolo</code> alongside the bypass flag in the escape-hatch card, with the isolated-environment caveat. Added a note on daily-rebuilt environments: <code>config.toml</code> gets wiped so flags beat config, <code>npm i -g</code> is only needed on reset, and managed workspace policy can override both.</td></tr>
           <tr><td>v2.6</td><td>July 2026</td><td>Corrected the GPT-5.6 context window to 272K tokens (OpenAI revised it down from the launch-day figure). Noted tougher dangerous-command detection with clearer rejection reasons in the Safety section.</td></tr>
           <tr><td>v2.5</td><td>July 2026</td><td>Bumped to Codex CLI v0.144. Added the new <code>writes</code> app-approval mode as the middle ground between constant prompts and bypassing everything, noted MCP interactive auth, refreshed the Bedrock note for GPT-5.6 with <code>max</code> effort, and added the Ultra concurrency warning.</td></tr>
           <tr><td>v2.4</td><td>July 2026</td><td>Every section is now collapsible. Daily-use sections (Install, Kick-Off, Checkpoint, End-of-Day) open by default, the rest start collapsed. Added Expand all / Collapse all so Ctrl+F still works, and nav or sidebar jumps auto-open their target section.</td></tr>
@@ -2092,7 +2109,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.6 &nbsp;&middot;&nbsp; Codex CLI v0.144</p>
+    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.7 &nbsp;&middot;&nbsp; Codex CLI v0.144</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
