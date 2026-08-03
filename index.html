@@ -353,14 +353,14 @@ pre code{white-space:pre}
   <button id="whats-new-toggle" onclick="toggleWN()" aria-expanded="true">
     <span class="pulse-dot"></span>
     <span class="wn-label">What's New</span>
-    <span class="wn-text">Codex CLI v0.145: /import migrates your Claude Code and Cursor setup into Codex, faster startup via concurrent skill discovery.</span>
+    <span class="wn-text">Codex CLI v0.146: name and pin sessions with /new and /clear, switch between side conversations, fork threads, plus a Claude Code plugin marketplace.</span>
     <span class="wn-chevron" id="wn-chevron">▶</span>
   </button>
   <div id="whats-new-body" class="closed">
     <div class="wn-grid">
       <div class="wn-card event">
-        <h4>🚀 Guide v2.10 — Codex CLI v0.145</h4>
-        <p><code>/import</code> now migrates settings, MCP servers, plugins, sessions, commands, and project config from Claude Code and Cursor straight into Codex, handy if you run more than one agent. Startup is faster thanks to concurrent skill and plugin discovery. Bundled GPT-5.4 uses were migrated to GPT-5.6 Terra and Luna ahead of the 5.4 retirement.</p>
+        <h4>🚀 Guide v2.11 — Codex CLI v0.146</h4>
+        <p>Session management landed: name sessions with <code>/new</code> or <code>/clear</code>, pin important threads, and switch between side conversations without closing them. You can also fork a thread (including temporary forks that stay off your listings) to try an approach without polluting the main session. Plugin marketplaces now include Amazon Bedrock and Claude Code.</p>
       </div>
       <div class="wn-card">
         <h4>🔍 Conversation History Search</h4>
@@ -408,7 +408,7 @@ pre code{white-space:pre}
       The practical field guide for using OpenAI Codex CLI inside Replit Shell. ChatGPT subscription auth, AGENTS.md, approval modes, and daily workflow prompts.
     </p>
     <div class="tag-list" style="justify-content:center">
-      <span class="tag">Codex CLI v0.145</span>
+      <span class="tag">Codex CLI v0.146</span>
       <span class="tag">Updated June 2026</span>
       <span class="tag">GPT-5.6</span>
       <span class="tag">ChatGPT OAuth</span>
@@ -1079,6 +1079,17 @@ Do not start writing code yet. Wait for me to tell you what to work on today."</
       <p style="font-size:12.5px;color:var(--text-muted);margin-top:10px">Shows an interactive picker with your recent sessions. Useful if you've been running multiple projects and want to choose the right one.</p>
     </div>
   </div>
+
+  <div class="spacer"></div>
+
+  <h3>Name, Pin &amp; Fork Sessions (v0.146+)</h3>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">v0.146 turned sessions into something you can actually manage. Name a fresh session so it's findable later, pin the important ones, and keep side conversations open at once instead of losing your place when you switch context.</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">slash commands (inside session)</span><button class="copy-btn" onclick="copyPre(this)">Copy</button></div>
+    <pre><code>/new      # start a fresh named session
+/clear    # clear and name the current one</code></pre>
+  </div>
+  <p style="font-size:13px;color:var(--text-muted);margin-top:10px">You can also <strong>fork a thread</strong> to try an approach down a separate path. Temporary forks don't show up in your thread listings, so they're good for throwaway experiments you don't want cluttering your history.</p>
 
   <div class="spacer"></div>
 
@@ -2159,6 +2170,7 @@ codex auth login --device</code></pre>
       <table class="ref-table">
         <thead><tr><th>Version</th><th>Date</th><th>Notes</th></tr></thead>
         <tbody>
+          <tr><td>v2.11</td><td>July 2026</td><td>Bumped to Codex CLI v0.146. Added session management (<code>/new</code>, <code>/clear</code>, pinning, side conversations, thread forking) to the Session Resume area, and noted Bedrock and Claude Code plugin marketplaces.</td></tr>
           <tr><td>v2.10</td><td>July 2026</td><td>Bumped to Codex CLI v0.145. Added the <code>/import</code> command (migrates Claude Code and Cursor settings, MCP servers, plugins, and sessions into Codex) and noted faster startup from concurrent skill/plugin discovery.</td></tr>
           <tr><td>v2.9</td><td>July 2026</td><td>Rewrote Install around <code>npx</code> after real-world testing: Replit's Nix store is read-only so <code>npm install -g</code> fails with EACCES, and Replit ships its own unrelated <code>codex</code> binary that shadows the real CLI. Added device-code auth as an explicit first step, plus two Troubleshooting entries (impostor binary, EACCES).</td></tr>
           <tr><td>v2.8</td><td>July 2026</td><td>Install command now pins <code>@latest</code> and launches with <code>--yolo</code> for an uninterrupted session, with the isolated-environment caveat directly beneath it.</td></tr>
@@ -2193,7 +2205,7 @@ codex auth login --device</code></pre>
   <div class="container">
     <div style="margin-bottom:12px;font-size:20px">⬡</div>
     <p>Built by <a href="#" target="_blank">JMF Dynamic Global</a> &nbsp;&middot;&nbsp; Sister guide: <a href="https://mr-follis.github.io/Replit-Claude-Code-Shell-GitHub-Safe-Prompt-Guide/" target="_blank">Claude Code Replit Guide</a></p>
-    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.10 &nbsp;&middot;&nbsp; Codex CLI v0.145</p>
+    <p style="margin-top:8px">Last updated: July 2026 &nbsp;&middot;&nbsp; Guide v2.11 &nbsp;&middot;&nbsp; Codex CLI v0.146</p>
     <p style="margin-top:8px">Not affiliated with OpenAI. All product names are trademarks of their respective owners.</p>
   </div>
 </footer>
